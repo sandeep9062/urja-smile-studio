@@ -31,6 +31,7 @@ import {
   User,
   Menu,
   X,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -161,6 +162,21 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
                 return linkContent;
               })}
             </nav>
+
+            {/* Back to Website */}
+            <div className="px-2 pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+              <Link
+                href="/"
+                className={cn(
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                  "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+                  collapsed && "justify-center px-2",
+                )}
+              >
+                <ExternalLink className="h-5 w-5 flex-shrink-0" />
+                {!collapsed && <span>Back to Website</span>}
+              </Link>
+            </div>
           </ScrollArea>
         </aside>
 
