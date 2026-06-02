@@ -1,0 +1,609 @@
+// ============================================================================
+// Urja Dental Clinic - Prisma Schema
+// PostgreSQL (Neon / Supabase managed)
+// ============================================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// User & Authentication
+// ============================================================================
+
+enum UserRole {
+  owner
+  doctor
+  front_desk
+  editor
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(front_desk)
+  avatar       String?
+  phone        String?
+  isActive     Boolean  @default(true)
+  lastLogin    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  refreshTokens  RefreshToken[]
+  activityLogs   ActivityLog[]
+  createdPatients Patient[]       @relation("CreatedBy")
+  appointments   Appointment[]
+  blogPosts      BlogPost[]
+  enquiries      Enquiry[]       @relation("AssignedTo")
+  enquiryNotes   EnquiryNote[]
+  patientNotes   PatientNote[]
+  pageContents   PageContent[]   @relation("LastModifiedBy")
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ============================================================================
+// Patient Management
+// ============================================================================
+
+enum Gender {
+  male
+  female
+  other
+}
+
+model Patient {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  phone         String
+  dateOfBirth   DateTime?
+  gender        Gender?
+  address       String?
+  medicalHistory String?
+  allergies     String?
+  photo         String?
+  createdBy     String?
+  createdById   String?
+  createdByUser User?     @relation("CreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  appointments  Appointment[]
+  notes         PatientNote[]
+
+  @@index([email])
+  @@index([phone])
+  @@map("patients")
+}
+
+model PatientNote {
+  id        String   @id @default(cuid())
+  content   String
+  patientId String
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  createdById String
+  createdBy User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([patientId])
+  @@map("patient_notes")
+}
+
+// ============================================================================
+// Doctor Management
+// ============================================================================
+
+model Doctor {
+  id                 String   @id @default(cuid())
+  name               String
+  slug               String   @unique
+  photo              String?
+  qualification      String
+  experience         Int
+  specializations    String[]
+  bio                String
+  consultationFees   Decimal  @db.Decimal(10, 2)
+  isActive           Boolean  @default(true)
+  order              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  schedule      DoctorSchedule[]
+  appointments  Appointment[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("doctors")
+}
+
+model DoctorSchedule {
+  id          String  @id @default(cuid())
+  doctorId    String
+  doctor      Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  day         String
+  startTime   String
+  endTime     String
+  isAvailable Boolean @default(true)
+
+  @@index([doctorId])
+  @@map("doctor_schedules")
+}
+
+// ============================================================================
+// Service Management
+// ============================================================================
+
+model Service {
+  id                 String   @id @default(cuid())
+  name               String
+  slug               String   @unique
+  icon               String?
+  banner             String?
+  shortDescription   String
+  description        String
+  benefits           String[]
+  category           String?
+  isActive           Boolean  @default(true)
+  order              Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  keywords        String[]
+  ogImage         String?
+  canonicalUrl    String?
+
+  // Relations
+  faqs              FAQ[]
+  beforeAfterPhotos BeforeAfterPhoto[]
+  appointments      Appointment[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("services")
+}
+
+model FAQ {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String
+  order     Int     @default(0)
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId])
+  @@map("faqs")
+}
+
+model BeforeAfterPhoto {
+  id        String  @id @default(cuid())
+  before    String
+  after     String
+  caption   String?
+  order     Int     @default(0)
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId])
+  @@map("before_after_photos")
+}
+
+// ============================================================================
+// Appointment Management
+// ============================================================================
+
+enum AppointmentStatus {
+  pending
+  confirmed
+  completed
+  cancelled
+  rescheduled
+}
+
+model Appointment {
+  id            String            @id @default(cuid())
+  patientName   String
+  patientPhone  String
+  patientEmail  String
+  patientId     String?
+  patient       Patient?          @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  serviceId     String?
+  service       Service?          @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  doctorId      String?
+  doctor        Doctor?           @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  date          DateTime
+  time          String
+  status        AppointmentStatus @default(pending)
+  notes         String?
+  createdById   String?
+  createdBy     User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([date])
+  @@index([status])
+  @@index([patientId])
+  @@index([doctorId])
+  @@map("appointments")
+}
+
+// ============================================================================
+// Blog / Content Management
+// ============================================================================
+
+enum BlogStatus {
+  draft
+  published
+  scheduled
+}
+
+model BlogPost {
+  id            String     @id @default(cuid())
+  title         String
+  slug          String     @unique
+  content       String
+  excerpt       String
+  featuredImage String?
+  category      String
+  tags          String[]
+  authorId      String
+  author        User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  status        BlogStatus @default(draft)
+  publishDate   DateTime?
+  views         Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  keywords        String[]
+  ogImage         String?
+  canonicalUrl    String?
+
+  @@index([slug])
+  @@index([status])
+  @@index([authorId])
+  @@map("blog_posts")
+}
+
+// ============================================================================
+// Gallery
+// ============================================================================
+
+model GalleryImage {
+  id             String   @id @default(cuid())
+  url            String
+  thumbnail      String
+  title          String
+  caption        String?
+  category       String
+  treatmentTags  String[]
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([category])
+  @@map("gallery_images")
+}
+
+// ============================================================================
+// Testimonials
+// ============================================================================
+
+enum TestimonialStatus {
+  pending
+  approved
+  rejected
+}
+
+model Testimonial {
+  id           String            @id @default(cuid())
+  patientName  String
+  patientPhoto String?
+  rating       Int
+  testimonial  String
+  treatment    String?
+  status       TestimonialStatus @default(pending)
+  isFeatured   Boolean           @default(false)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([status])
+  @@index([isFeatured])
+  @@map("testimonials")
+}
+
+// ============================================================================
+// Google Reviews Embed
+// ============================================================================
+
+model GoogleReview {
+  id              String   @id @default(cuid())
+  embedUrl        String
+  isEnabled       Boolean  @default(true)
+  showOnHomepage  Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("google_reviews")
+}
+
+// ============================================================================
+// Enquiry Management
+// ============================================================================
+
+enum EnquiryStatus {
+  new
+  in_progress
+  closed
+}
+
+model Enquiry {
+  id          String        @id @default(cuid())
+  name        String
+  phone       String
+  email       String
+  subject     String
+  message     String
+  status      EnquiryStatus @default(new)
+  assignedToId String?
+  assignedTo  User?         @relation("AssignedTo", fields: [assignedToId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  internalNotes      EnquiryNote[]
+  conversationHistory ConversationMessage[]
+
+  @@index([status])
+  @@index([assignedToId])
+  @@map("enquiries")
+}
+
+model EnquiryNote {
+  id         String   @id @default(cuid())
+  content    String
+  enquiryId  String
+  enquiry    Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  createdById String
+  createdBy  User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@index([enquiryId])
+  @@map("enquiry_notes")
+}
+
+enum MessageType {
+  email
+  sms
+  internal
+}
+
+model ConversationMessage {
+  id        String      @id @default(cuid())
+  type      MessageType
+  content   String
+  sentBy    String
+  enquiryId String
+  enquiry   Enquiry     @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  sentAt    DateTime    @default(now())
+
+  @@index([enquiryId])
+  @@map("conversation_messages")
+}
+
+// ============================================================================
+// Homepage / Site Settings
+// ============================================================================
+
+model ClinicSettings {
+  id             String   @id @default(cuid())
+  clinicName     String
+  phoneNumbers   String[]
+  emails         String[]
+  address        String
+  googleMapLink  String?
+  socialMedia    Json     @default("{}")
+  footerLinks    Json     @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  timings ClinicTiming[]
+
+  @@map("clinic_settings")
+}
+
+model ClinicTiming {
+  id         String  @id @default(cuid())
+  settingsId String
+  settings   ClinicSettings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  day        String
+  openTime   String
+  closeTime  String
+  isClosed   Boolean @default(false)
+
+  @@index([settingsId])
+  @@map("clinic_timings")
+}
+
+model HeroSection {
+  id           String   @id @default(cuid())
+  heading      String
+  subheading   String
+  ctaButtons   Json     @default("[]")
+  backgroundImage String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("hero_sections")
+}
+
+model USPItem {
+  id          String   @id @default(cuid())
+  icon        String
+  title       String
+  description String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("usp_items")
+}
+
+model PromotionalOffer {
+  id          String    @id @default(cuid())
+  bannerImage String?
+  offerText   String
+  expiryDate  DateTime
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("promotional_offers")
+}
+
+model HomepagePopup {
+  id        String   @id @default(cuid())
+  image     String?
+  message   String
+  ctaText   String
+  ctaLink   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("homepage_popups")
+}
+
+// ============================================================================
+// Page Content Manager
+// ============================================================================
+
+enum PageStatus {
+  draft
+  published
+}
+
+model PageContent {
+  id             String     @id @default(cuid())
+  slug           String     @unique
+  title          String
+  content        String
+  status         PageStatus @default(draft)
+  lastModifiedById String?
+  lastModifiedBy User?      @relation("LastModifiedBy", fields: [lastModifiedById], references: [id], onDelete: SetNull)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  keywords        String[]
+  ogImage         String?
+  canonicalUrl    String?
+
+  @@index([slug])
+  @@index([status])
+  @@map("page_contents")
+}
+
+// ============================================================================
+// URL Redirects
+// ============================================================================
+
+enum RedirectType {
+  PERMANENT
+  TEMPORARY
+}
+
+model Redirect {
+  id        String       @id @default(cuid())
+  oldUrl    String       @unique
+  newUrl    String
+  type      RedirectType @default(PERMANENT)
+  isActive  Boolean      @default(true)
+  hits      Int          @default(0)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([isActive])
+  @@map("redirects")
+}
+
+// ============================================================================
+// Activity Logs
+// ============================================================================
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  module    String
+  details   String?
+  ipAddress String
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([module])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// ============================================================================
+// Backups
+// ============================================================================
+
+enum BackupType {
+  automatic
+  manual
+}
+
+enum BackupStatus {
+  completed
+  failed
+  in_progress
+}
+
+model Backup {
+  id           String       @id @default(cuid())
+  type         BackupType
+  status       BackupStatus @default(in_progress)
+  databaseSize String?
+  mediaSize    String?
+  createdAt    DateTime     @default(now())
+  completedAt  DateTime?
+
+  @@index([status])
+  @@map("backups")
+}

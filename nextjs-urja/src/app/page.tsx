@@ -1,6 +1,5 @@
-"use client";
-
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Calendar,
@@ -17,6 +16,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CLINIC, SERVICES, DOCTORS, TESTIMONIALS, USPS } from "@/lib/site-data";
+
+// Enable ISR - revalidate every 60 seconds
+export const revalidate = 60;
 
 export default function HomePage() {
   return (
@@ -73,9 +75,12 @@ export default function HomePage() {
               className="absolute -inset-4 bg-gradient-coral opacity-20 blur-2xl rounded-3xl"
               aria-hidden
             />
-            <img
-              src="https://picsum.photos/seed/urja-hero/900/1000"
+            <Image
+              src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80"
               alt="Confident patient smiling after dental treatment at Urja Dental Clinic"
+              width={800}
+              height={520}
+              priority
               className="relative w-full h-[420px] md:h-[520px] object-cover rounded-3xl shadow-soft"
             />
             <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-2xl p-4 shadow-soft hidden sm:flex items-center gap-3">
@@ -162,9 +167,11 @@ export default function HomePage() {
                 key={d.slug}
                 className="snap-start shrink-0 w-72 rounded-2xl border border-border bg-background overflow-hidden hover:shadow-soft transition"
               >
-                <img
+                <Image
                   src={d.image}
                   alt={`Portrait of ${d.name}`}
+                  width={288}
+                  height={288}
                   className="h-72 w-full object-cover"
                 />
                 <div className="p-5">
@@ -240,9 +247,11 @@ export default function HomePage() {
               <div key={i} className="rounded-2xl overflow-hidden border border-border bg-card">
                 <div className="grid grid-cols-2">
                   <div className="relative">
-                    <img
+                    <Image
                       src={`https://picsum.photos/seed/before-${i}/400/400`}
                       alt="Before treatment"
+                      width={400}
+                      height={192}
                       className="h-48 w-full object-cover"
                     />
                     <span className="absolute top-2 left-2 bg-foreground/80 text-background text-[10px] font-bold uppercase px-2 py-0.5 rounded">
@@ -250,9 +259,11 @@ export default function HomePage() {
                     </span>
                   </div>
                   <div className="relative">
-                    <img
+                    <Image
                       src={`https://picsum.photos/seed/after-${i}/400/400`}
                       alt="After treatment"
+                      width={400}
+                      height={192}
                       className="h-48 w-full object-cover"
                     />
                     <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold uppercase px-2 py-0.5 rounded">
