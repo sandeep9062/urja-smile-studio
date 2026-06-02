@@ -1,3 +1,5 @@
+
+
 // =============================================================================
 // Prisma Client Singleton
 // =============================================================================
@@ -6,7 +8,7 @@
 // In production, it ensures a single connection pool is used.
 // =============================================================================
 
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@/generated/prisma/client";
 
 // PrismaClient instance attached to globalThis in development
 const globalForPrisma = globalThis as unknown as {
@@ -21,7 +23,7 @@ export const prisma =
       process.env.NODE_ENV === "development"
         ? ["query", "error", "warn"]
         : ["error"],
-  });
+  } as any);
 
 // In development, attach to globalThis to prevent multiple instances
 if (process.env.NODE_ENV !== "production") {
