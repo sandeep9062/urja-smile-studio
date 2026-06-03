@@ -340,7 +340,7 @@ export const TESTIMONIALS = [
 
 export const USPS = [
   { icon: Stethoscope, title: "20+ Years Experience", text: "Decades of trusted dental care" },
-  { icon: ShieldCheck, title: "NABH Accredited", text: "Highest clinical safety standards" },
+
   { icon: Smile, title: "Pain-Free Treatment", text: "Modern, gentle, anxiety-free care" },
   { icon: Sparkles, title: "Advanced Equipment", text: "3D imaging, lasers & digital scans" },
 ];
