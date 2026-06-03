@@ -7,7 +7,7 @@ import {
   Quote,
   MapPin,
   Phone,
-  CheckCircle2,
+
   Award,
   Users,
   Smile,
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CLINIC, SERVICES, DOCTORS, TESTIMONIALS, USPS } from "@/lib/site-data";
 import HolisticVsConventional from "@/components/site/HolisticVsConventional";
+import WhyUrja from "@/components/site/WhyUrja";
 
 // Enable ISR - revalidate every 60 seconds
 export const revalidate = 60;
@@ -111,7 +112,7 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
+<WhyUrja/>
 
 
 <HolisticVsConventional />
