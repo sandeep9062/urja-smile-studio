@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Lock, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,15 +22,23 @@ export default function AdminLoginPage() {
     setError("");
     setIsLoading(true);
 
-    // Simulate login
-    setTimeout(() => {
-      if (email === "admin@urjadental.com" && password === "admin123") {
-        window.location.href = "/admin-dashboard";
-      } else {
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
         setError("Invalid email or password. Please try again.");
+      } else {
+        window.location.href = "/admin-dashboard";
       }
+    } catch (err) {
+      setError("An error occurred during sign in. Please try again.");
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (

@@ -10,16 +10,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { SERVICES, DOCTORS } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { appointmentBookingSchema } from "@/lib/validators";
 
 const TIME_SLOTS = [
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "3:00 PM",
-  "4:00 PM",
-  "5:00 PM",
-  "6:00 PM",
-  "7:00 PM",
+  "10:00 AM", "11:00 AM", "12:00 PM",
+  "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM",
 ];
 
 type FormState = {
@@ -42,17 +37,14 @@ const STEPS = [
 
 export default function BookPage() {
   const [step, setStep] = useState(1);
-  const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState<FormState>({
-    service: "",
-    doctor: "",
-    date: "",
-    time: "",
-    name: "",
-    phone: "",
-    email: "",
-    complaint: "",
+    service: "", doctor: "", date: "", time: "",
+    name: "", phone: "", email: "", complaint: "",
   });
+  const [done, setDone] = useState(false);
 
   const update = (k: keyof FormState, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -63,14 +55,64 @@ export default function BookPage() {
     return true;
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name.trim().length < 2) return toast.error("Please enter your name");
-    if (!/^[0-9+\s-]{7,15}$/.test(form.phone))
-      return toast.error("Please enter a valid phone number");
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      return toast.error("Invalid email");
-    setDone(true);
+    setServerError(null);
+    setFieldErrors({});
+
+    const payload = {
+      service: form.service,
+      doctor: form.doctor,
+      date: form.date,
+      time: form.time,
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      complaint: form.complaint,
+      website: "", // honeypot
+    };
+
+    // Client-side Zod validation — same schema the server uses.
+    const parsed = appointmentBookingSchema.safeParse(payload);
+    if (!parsed.success) {
+      const errs: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = issue.path.join(".") || "_root";
+        if (!errs[key]) errs[key] = issue.message;
+      }
+      setFieldErrors(errs);
+      toast.error(parsed.error.issues[0]?.message || "Please check your details");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        if (res.status === 429) {
+          setServerError("You've made too many requests. Please wait a moment and try again.");
+          toast.error("Too many requests — please slow down");
+        } else if (data.fieldErrors) {
+          setFieldErrors(data.fieldErrors);
+          toast.error(data.fieldErrors[Object.keys(data.fieldErrors)[0]] || data.error || "Please check the form");
+        } else {
+          setServerError(data.error || "Failed to submit");
+          toast.error(data.error || "Failed to submit");
+        }
+        return;
+      }
+      setDone(true);
+    } catch (err) {
+      setServerError("Network error — please try again");
+      toast.error("Network error — please try again");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (done) {
@@ -108,7 +150,6 @@ export default function BookPage() {
       />
 
       <section className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-        {/* Stepper */}
         <ol className="flex items-center justify-between mb-10">
           {STEPS.map((s, i) => (
             <li key={s.id} className="flex-1 flex items-center">
@@ -143,8 +184,12 @@ export default function BookPage() {
 
         <form
           onSubmit={submit}
+          noValidate
           className="rounded-3xl border border-border bg-card p-6 md:p-10 shadow-soft"
         >
+          {/* Honeypot */}
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" className="absolute -left-[9999px] h-0 w-0 opacity-0" aria-hidden />
+
           {step === 1 && (
             <div>
               <h2 className="text-xl font-bold">What can we help with?</h2>
@@ -168,6 +213,7 @@ export default function BookPage() {
                   </button>
                 ))}
               </div>
+              {fieldErrors.service && <p className="mt-2 text-xs text-destructive">{fieldErrors.service}</p>}
             </div>
           )}
 
@@ -208,6 +254,7 @@ export default function BookPage() {
                   </button>
                 ))}
               </div>
+              {fieldErrors.doctor && <p className="mt-2 text-xs text-destructive">{fieldErrors.doctor}</p>}
             </div>
           )}
 
@@ -224,7 +271,9 @@ export default function BookPage() {
                     onChange={(e) => update("date", e.target.value)}
                     min={new Date().toISOString().split("T")[0]}
                     required
+                    aria-invalid={!!fieldErrors.date}
                   />
+                  {fieldErrors.date && <p className="mt-1 text-xs text-destructive">{fieldErrors.date}</p>}
                 </div>
                 <div>
                   <Label>Time slot</Label>
@@ -245,6 +294,7 @@ export default function BookPage() {
                       </button>
                     ))}
                   </div>
+                  {fieldErrors.time && <p className="mt-1 text-xs text-destructive">{fieldErrors.time}</p>}
                 </div>
               </div>
             </div>
@@ -261,7 +311,9 @@ export default function BookPage() {
                   maxLength={100}
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
+                  aria-invalid={!!fieldErrors.name}
                 />
+                {fieldErrors.name && <p className="mt-1 text-xs text-destructive">{fieldErrors.name}</p>}
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
@@ -273,7 +325,9 @@ export default function BookPage() {
                     value={form.phone}
                     onChange={(e) => update("phone", e.target.value)}
                     placeholder="+91 98xxx xxxxx"
+                    aria-invalid={!!fieldErrors.phone}
                   />
+                  {fieldErrors.phone && <p className="mt-1 text-xs text-destructive">{fieldErrors.phone}</p>}
                 </div>
                 <div>
                   <Label htmlFor="email">Email (optional)</Label>
@@ -282,7 +336,9 @@ export default function BookPage() {
                     type="email"
                     value={form.email}
                     onChange={(e) => update("email", e.target.value)}
+                    aria-invalid={!!fieldErrors.email}
                   />
+                  {fieldErrors.email && <p className="mt-1 text-xs text-destructive">{fieldErrors.email}</p>}
                 </div>
               </div>
               <div>
@@ -290,11 +346,15 @@ export default function BookPage() {
                 <Textarea
                   id="complaint"
                   rows={4}
-                  maxLength={500}
+                  maxLength={1000}
                   value={form.complaint}
                   onChange={(e) => update("complaint", e.target.value)}
                 />
+                {fieldErrors.complaint && <p className="mt-1 text-xs text-destructive">{fieldErrors.complaint}</p>}
               </div>
+              {serverError && (
+                <p className="rounded-lg bg-destructive/10 text-destructive text-sm px-3 py-2">{serverError}</p>
+              )}
             </div>
           )}
 
@@ -303,7 +363,7 @@ export default function BookPage() {
               type="button"
               variant="outline"
               onClick={() => setStep((s) => Math.max(1, s - 1))}
-              disabled={step === 1}
+              disabled={step === 1 || submitting}
             >
               <ChevronLeft className="h-4 w-4 mr-1" /> Back
             </Button>
@@ -312,7 +372,9 @@ export default function BookPage() {
                 Next <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             ) : (
-              <Button type="submit">Confirm Appointment</Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Submitting…" : "Confirm Appointment"}
+              </Button>
             )}
           </div>
         </form>

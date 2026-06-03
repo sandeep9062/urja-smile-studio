@@ -32,6 +32,7 @@ import {
   Menu,
   X,
   ExternalLink,
+  Images,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,7 @@ const navigation = [
   { name: "Doctors", href: "/admin-dashboard/doctors", icon: Stethoscope },
   { name: "Services", href: "/admin-dashboard/services", icon: Sparkles },
   { name: "Smile Gallery", href: "/admin-dashboard/gallery", icon: Image },
+  { name: "Media Library", href: "/admin-dashboard/media-library", icon: Images },
   { name: "Blogs", href: "/admin-dashboard/blogs", icon: BookOpen },
   { name: "Testimonials", href: "/admin-dashboard/testimonials", icon: MessageSquareQuote },
   { name: "Reviews", href: "/admin-dashboard/reviews", icon: Star },

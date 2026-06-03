@@ -22,11 +22,18 @@ export default function TestimonialsPage() {
                 ))}
               </div>
               <p className="mt-4 text-sm leading-relaxed">&ldquo;{t.review}&rdquo;</p>
-              <div className="mt-5 pt-5 border-t border-border">
-                <p className="font-semibold text-sm">{t.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t.treatment} • {t.date}
-                </p>
+              <div className="mt-5 pt-5 border-t border-border flex items-center gap-3">
+                <img
+                  src={t.image}
+                  alt={t.name}
+                  className="h-10 w-10 rounded-full object-cover ring-2 ring-coral/20"
+                />
+                <div>
+                  <p className="font-semibold text-sm">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.treatment} • {t.date}
+                  </p>
+                </div>
               </div>
             </article>
           ))}

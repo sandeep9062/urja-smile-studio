@@ -7,15 +7,16 @@ import {
   Quote,
   MapPin,
   Phone,
-  MessageCircle,
   CheckCircle2,
   Award,
   Users,
   Smile,
+  Play,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CLINIC, SERVICES, DOCTORS, TESTIMONIALS, USPS } from "@/lib/site-data";
+import HolisticVsConventional from "@/components/site/HolisticVsConventional";
 
 // Enable ISR - revalidate every 60 seconds
 export const revalidate = 60;
@@ -65,9 +66,7 @@ export default function HomePage() {
                 ))}
                 <span className="ml-2 font-medium text-foreground">4.9</span> on Google
               </div>
-              <div className="hidden sm:flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-primary" /> NABH Accredited
-              </div>
+              
             </div>
           </div>
           <div className="relative animate-fade-up">
@@ -113,6 +112,9 @@ export default function HomePage() {
         </div>
       </section>
 
+
+
+<HolisticVsConventional />
       {/* SERVICES */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center max-w-2xl mx-auto">
@@ -128,20 +130,27 @@ export default function HomePage() {
           </p>
         </div>
         <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {SERVICES.map(({ slug, title, short, icon: Icon }) => (
+          {SERVICES.map(({ slug, title, short, image }) => (
             <Link
               key={slug}
               href={`/services/${slug}`}
-              className="group rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-soft transition"
+              className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-soft transition"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-coral text-primary-foreground">
-                <Icon className="h-6 w-6" />
+              <div className="relative h-40 w-full overflow-hidden">
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <h3 className="mt-4 font-semibold text-base">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{short}</p>
-              <span className="mt-4 inline-flex items-center text-xs font-semibold text-primary group-hover:gap-2 gap-1 transition-all">
-                Learn more <ArrowRight className="h-3.5 w-3.5" />
-              </span>
+              <div className="p-6">
+                <h3 className="font-semibold text-base">{title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{short}</p>
+                <span className="mt-4 inline-flex items-center text-xs font-semibold text-primary group-hover:gap-2 gap-1 transition-all">
+                  Learn more <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
             </Link>
           ))}
         </div>
@@ -209,11 +218,18 @@ export default function HomePage() {
                 <p className="mt-4 text-sm leading-relaxed text-foreground/90">
                   &ldquo;{t.review}&rdquo;
                 </p>
-                <div className="mt-5 pt-5 border-t border-border">
-                  <p className="font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {t.treatment} • {t.date}
-                  </p>
+                <div className="mt-5 pt-5 border-t border-border flex items-center gap-3">
+                  <img
+                    src={t.image}
+                    alt={t.name}
+                    className="h-10 w-10 rounded-full object-cover ring-2 ring-coral/20"
+                  />
+                  <div>
+                    <p className="font-semibold text-sm">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t.treatment} • {t.date}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -223,6 +239,32 @@ export default function HomePage() {
           <Button asChild variant="outline">
             <Link href="/testimonials">Read all reviews</Link>
           </Button>
+        </div>
+      </section>
+
+  <section className="bg-card border-y border-border">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <h2 className="text-2xl md:text-3xl font-bold">Video stories</h2>
+          <p className="mt-2 text-muted-foreground">Real patients, in their own words.</p>
+          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="relative rounded-2xl overflow-hidden border border-border group cursor-pointer"
+              >
+                <img
+                  src={`https://picsum.photos/seed/video-${i}/600/400`}
+                  alt={`Video testimonial ${i}`}
+                  className="h-56 w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-foreground/40 group-hover:bg-foreground/30 transition flex items-center justify-center">
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-soft group-hover:scale-110 transition">
+                    <Play className="h-7 w-7 ml-1" fill="currentColor" />
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -279,12 +321,12 @@ export default function HomePage() {
 
       {/* TRUST */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-6 text-center">
           {[
             { icon: Award, value: "22+", label: "Years in practice" },
             { icon: Users, value: "25K+", label: "Happy patients" },
             { icon: Star, value: "4.9", label: "Google rating" },
-            { icon: CheckCircle2, value: "NABH", label: "Accredited" },
+      
           ].map(({ icon: Icon, value, label }) => (
             <div key={label} className="rounded-2xl border border-border p-6 bg-card">
               <Icon className="h-6 w-6 mx-auto text-primary" />
@@ -323,7 +365,10 @@ export default function HomePage() {
                 className="bg-[#25D366] text-white hover:bg-[#1ebe5d] hover:text-white border-transparent"
               >
                 <a href={CLINIC.whatsapp} target="_blank" rel="noreferrer">
-                  <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp Us
+                  <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                  WhatsApp Us
                 </a>
               </Button>
             </div>

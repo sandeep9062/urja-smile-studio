@@ -51,6 +51,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockBlogs } from "@/lib/mock-data";
 import type { BlogPost, BlogStatus } from "@/lib/types";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import { CloudinaryUploader } from "@/components/admin/media-picker";
 
 const statusColors: Record<BlogStatus, string> = {
   published: "bg-green-100 text-green-700",
@@ -63,6 +65,8 @@ export default function BlogsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [content, setContent] = useState("");
+  const [featuredImage, setFeaturedImage] = useState<string | null>(null);
 
   const filteredBlogs = blogs.filter((blog) => {
     const matchesSearch =
@@ -249,11 +253,43 @@ export default function BlogsPage() {
               </div>
               <div className="space-y-2">
                 <Label>Content</Label>
-                <Textarea placeholder="Write your blog post content here..." rows={12} />
+                <RichTextEditor
+                  value={content}
+                  onChange={setContent}
+                  placeholder="Write your blog post — headings, lists, quotes, links and images are all supported."
+                  uploadFolder="urja-dental/blogs"
+                  minHeight={320}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Featured Image</Label>
-                <Input type="file" accept="image/*" />
+                {featuredImage ? (
+                  <div className="relative w-full max-w-sm rounded-md overflow-hidden border bg-muted">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={featuredImage}
+                      alt="Featured"
+                      className="w-full h-auto object-cover max-h-48"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={() => setFeaturedImage(null)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <CloudinaryUploader
+                    folder="urja-dental/blogs/featured"
+                    variant="dropzone"
+                    onUploaded={(asset) => setFeaturedImage(asset.url)}
+                  >
+                    Upload featured image
+                  </CloudinaryUploader>
+                )}
               </div>
             </TabsContent>
             <TabsContent value="details" className="space-y-4 mt-4">

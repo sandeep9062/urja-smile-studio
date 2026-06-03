@@ -27,6 +27,7 @@ export type Service = {
   short: string;
   description: string;
   icon: LucideIcon;
+  image: string;
   whoNeeds: string[];
   procedure: string[];
   faqs: { q: string; a: string }[];
@@ -40,6 +41,7 @@ export const SERVICES: Service[] = [
     description:
       "Dental implants are titanium posts placed in the jawbone that act as roots for replacement teeth — the most durable, comfortable solution for missing teeth.",
     icon: Bluetooth,
+    image: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Adults with one or more missing teeth",
       "Patients with loose or ill-fitting dentures",
@@ -65,6 +67,7 @@ export const SERVICES: Service[] = [
     description:
       "Modern root canal therapy removes infection from inside the tooth and seals it — preserving your natural smile and ending the pain.",
     icon: Activity,
+    image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Severe or lingering toothache",
       "Sensitivity to hot or cold that lingers",
@@ -89,6 +92,7 @@ export const SERVICES: Service[] = [
     description:
       "We offer metal, ceramic, and clear aligner (Invisalign-style) options to gently move teeth into a confident, healthy alignment.",
     icon: Smile,
+    image: "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Crooked, crowded, or gapped teeth",
       "Overbite, underbite, or crossbite",
@@ -113,6 +117,7 @@ export const SERVICES: Service[] = [
     description:
       "Our in-clinic professional whitening uses safe, enamel-friendly gels and accelerator lights for visible results in under an hour.",
     icon: Sparkles,
+    image: "https://images.unsplash.com/photo-1559181567-c3190ca9959b?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Stains from coffee, tea, or tobacco",
       "Anyone wanting a brighter event-ready smile",
@@ -136,6 +141,7 @@ export const SERVICES: Service[] = [
     description:
       "From porcelain veneers to digital smile design, we craft natural-looking transformations tailored to your face and personality.",
     icon: Smile,
+    image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Chipped, worn, or stained front teeth",
       "Uneven gum line or short teeth",
@@ -159,6 +165,7 @@ export const SERVICES: Service[] = [
     description:
       "Our child-friendly clinic environment and specially trained team make every visit a happy one — building healthy habits for life.",
     icon: Baby,
+    image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Children from age 1 onwards",
       "First dental visits and check-ups",
@@ -182,6 +189,7 @@ export const SERVICES: Service[] = [
     description:
       "From routine extractions to complex wisdom-tooth surgery, our surgical suite delivers safe, swift, and gentle outcomes.",
     icon: Scissors,
+    image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Impacted or painful wisdom teeth",
       "Severely decayed or fractured teeth",
@@ -205,6 +213,7 @@ export const SERVICES: Service[] = [
     description:
       "Healthy gums are the foundation of healthy teeth. Our periodontal therapy treats gum disease and restores pink, firm tissue.",
     icon: ShieldCheck,
+    image: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=600&q=80",
     whoNeeds: [
       "Bleeding or swollen gums",
       "Receding gum line or tooth sensitivity",
@@ -278,6 +287,7 @@ export const TESTIMONIALS = [
     treatment: "Dental Implants",
     rating: 5,
     date: "Mar 2026",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
     review:
       "After years of avoiding photos, I finally have my confidence back. The team was kind, the process painless, and the result better than I imagined.",
   },
@@ -286,6 +296,7 @@ export const TESTIMONIALS = [
     treatment: "Root Canal",
     rating: 5,
     date: "Feb 2026",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
     review:
       "I was terrified going in. Dr. Kapoor finished my RCT in one sitting and I felt zero pain. Honestly the best dental experience of my life.",
   },
@@ -294,6 +305,7 @@ export const TESTIMONIALS = [
     treatment: "Invisalign",
     rating: 5,
     date: "Jan 2026",
+    image: "https://randomuser.me/api/portraits/women/68.jpg",
     review:
       "Loved that no one could tell I was wearing aligners. My smile is straight, my bite feels great, and Dr. Mehta was an absolute pro.",
   },
@@ -302,6 +314,7 @@ export const TESTIMONIALS = [
     treatment: "Teeth Whitening",
     rating: 5,
     date: "Dec 2025",
+    image: "https://randomuser.me/api/portraits/men/75.jpg",
     review:
       "One hour, six shades brighter. The wedding photos came out incredible. Highly recommend Urja for anyone wanting quick results.",
   },
@@ -310,6 +323,7 @@ export const TESTIMONIALS = [
     treatment: "Pediatric Care",
     rating: 5,
     date: "Nov 2025",
+    image: "https://randomuser.me/api/portraits/women/65.jpg",
     review:
       "My 4-year-old actually asks to visit Dr. Meera. The clinic is so child-friendly — even cavity treatment was stress-free.",
   },
@@ -318,6 +332,7 @@ export const TESTIMONIALS = [
     treatment: "Smile Design",
     rating: 5,
     date: "Oct 2025",
+    image: "https://randomuser.me/api/portraits/men/22.jpg",
     review:
       "Six veneers later and I cannot stop smiling. The digital preview helped me see the result before we started. Worth every rupee.",
   },
