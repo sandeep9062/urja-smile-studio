@@ -97,7 +97,7 @@ export default function HomePage() {
 
       {/* USP STRIP */}
       <section className="border-y border-border bg-card">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-3 lg:grid-cols-3 gap-6">
           {USPS.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-start gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/60 text-primary">
