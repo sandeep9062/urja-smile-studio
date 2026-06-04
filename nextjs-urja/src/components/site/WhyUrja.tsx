@@ -1,52 +1,87 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Type ────────────────────────────────────────────────────────────────────
 
-const pillars = [
+export interface WhyUrjaPillarData {
+  tag: string;
+  headline: string;
+  body: string;
+  image: string;
+  fallbackGradient: string;
+  imageAlt: string;
+  nudge: string;
+}
+
+const DEFAULT_PILLARS: WhyUrjaPillarData[] = [
   {
-    id: "01",
-
-   image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80",
-    
-    // Fallback gradient shown when image is missing / loading
-    fallbackGradient: "linear-gradient(135deg, #e8d5c0 0%, #d4b896 50%, #c9a97a 100%)",
-    imageAlt: "Patient receiving gentle dental treatment at Urja",
     tag: "Zero anxiety",
     headline: "We treat the person,\nnot just the tooth.",
     body: "Every visit starts with a conversation. Our pain-free protocols and calm environment make even nervous patients feel at home.",
+    image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80",
+    fallbackGradient: "linear-gradient(135deg, #e8d5c0 0%, #d4b896 50%, #c9a97a 100%)",
+    imageAlt: "Patient receiving gentle dental treatment at Urja",
     nudge: "mt-0",
   },
   {
-    id: "02",
-image: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=600&q=80",
-    
-    fallbackGradient: "linear-gradient(135deg, #d6e8d5 0%, #a8ccb0 50%, #7daf8a 100%)",
-    imageAlt: "Advanced digital scanning technology at Urja Dental",
     tag: "Precision tech",
     headline: "Diagnosed right\nthe first time.",
     body: "3D digital scans, intraoral cameras, and AI-assisted analysis — no guesswork, no repeat visits.",
+    image: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=600&q=80",
+    fallbackGradient: "linear-gradient(135deg, #d6e8d5 0%, #a8ccb0 50%, #7daf8a 100%)",
+    imageAlt: "Advanced digital scanning technology at Urja Dental",
     nudge: "mt-16 md:mt-24",
   },
   {
-    id: "03",
-image: "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=600&q=80",
-    
-    fallbackGradient: "linear-gradient(135deg, #d5dde8 0%, #96adc9 50%, #7a96b8 100%)",
-    imageAlt: "Urja dental team in a modern clean clinic",
     tag: "Honest care",
     headline: "We tell you what\nyou actually need.",
     body: "Transparent treatment plans with fixed pricing. No upsells, no unnecessary procedures — ever.",
+    image: "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=600&q=80",
+    fallbackGradient: "linear-gradient(135deg, #d5dde8 0%, #96adc9 50%, #7a96b8 100%)",
+    imageAlt: "Urja dental team in a modern clean clinic",
     nudge: "mt-8 md:mt-12",
   },
 ];
 
 // ─── Component ─────────────────────────────────────────────────────
 
-export default function WhyUrja() {
+interface WhyUrjaProps {
+  pillars?: WhyUrjaPillarData[];
+}
+
+export default function WhyUrja({ pillars: propPillars }: WhyUrjaProps) {
+  const [pillars, setPillars] = useState<WhyUrjaPillarData[] | null>(null);
+
+  useEffect(() => {
+    // If pillars are passed as props, use them directly
+    if (propPillars) {
+      setPillars(propPillars);
+      return;
+    }
+    // Otherwise fetch from public API (from homepage SSR)
+    fetchWhyUrja();
+  }, [propPillars]);
+
+  async function fetchWhyUrja() {
+    try {
+      const res = await fetch("/api/why-urja");
+      if (!res.ok) throw new Error("Failed to fetch");
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        setPillars(json.data);
+        return;
+      }
+    } catch (e) {
+      console.warn("Could not fetch Why Urja pillars, using defaults", e);
+    }
+    setPillars(DEFAULT_PILLARS);
+  }
+
+  const activePillars = pillars || DEFAULT_PILLARS;
+
   return (
     <section
       className="relative overflow-hidden bg-accent/15 py-20 sm:py-24 md:py-32"
@@ -111,35 +146,33 @@ export default function WhyUrja() {
 
         {/* ── Three pillars ── */}
 
-        {/* 
-          MOBILE  (< sm):  single column, full-width cards, stacked
-          TABLET  (sm–md): 2-col then overflow; we use a single-col scroll
-          DESKTOP (md+):   3-col side-by-side with vertical stagger via mt-* 
-        */}
-
         {/* Mobile & tablet: vertical stack, centered */}
         <div className="flex flex-col gap-8 sm:gap-10 md:hidden">
-          {pillars.map((p) => (
-            <MobileCard key={p.id} pillar={p} />
+          {activePillars.map((p, idx) => (
+            <MobileCard key={idx} pillar={p} index={idx} />
           ))}
         </div>
 
         {/* Desktop: 3-col staggered grid */}
         <div className="hidden md:grid md:grid-cols-3 md:gap-5 lg:gap-7 xl:gap-8 md:items-start">
-          {pillars.map((p) => (
-            <DesktopCard key={p.id} pillar={p} />
+          {activePillars.map((p, idx) => (
+            <DesktopCard key={idx} pillar={p} index={idx} />
           ))}
         </div>
 
-      
       </div>
     </section>
   );
 }
 
+
+function formatIndex(index: number): string {
+  return `${index + 1}`.padStart(2, "0");
+}
+
 // ─── Desktop card (staggered portrait) ────────────────────────────────────────
 
-function DesktopCard({ pillar }: { pillar: typeof pillars[0] }) {
+function DesktopCard({ pillar, index }: { pillar: WhyUrjaPillarData; index: number }) {
   return (
     <article className={`group flex flex-col ${pillar.nudge}`}>
 
@@ -161,7 +194,7 @@ function DesktopCard({ pillar }: { pillar: typeof pillars[0] }) {
 
         {/* Number tag — top left */}
         <span className="absolute top-4 left-4 flex h-8 w-8 items-center justify-center rounded-full bg-background/80 text-[11px] font-black text-coral backdrop-blur-sm shadow-sm">
-          {pillar.id}
+          {formatIndex(index)}
         </span>
 
         {/* Category pill — top right */}
@@ -187,7 +220,7 @@ function DesktopCard({ pillar }: { pillar: typeof pillars[0] }) {
 
 // ─── Mobile card (horizontal image + text side-by-side on sm, stacked on xs) ──
 
-function MobileCard({ pillar }: { pillar: typeof pillars[0] }) {
+function MobileCard({ pillar, index }: { pillar: WhyUrjaPillarData; index: number }) {
   return (
     <article className="group flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
 
@@ -207,7 +240,7 @@ function MobileCard({ pillar }: { pillar: typeof pillars[0] }) {
 
         {/* Number */}
         <span className="absolute top-3 left-3 flex h-7 w-7 items-center justify-center rounded-full bg-background/80 text-[10px] font-black text-coral backdrop-blur-sm shadow-sm">
-          {pillar.id}
+          {formatIndex(index)}
         </span>
 
         {/* Tag pill */}

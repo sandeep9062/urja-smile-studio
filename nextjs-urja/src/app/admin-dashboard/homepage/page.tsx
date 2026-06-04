@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Save, Image, Type, Link, Calendar, Plus, Trash2, GripVertical } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,55 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ImageDropzone } from "@/components/admin/drag-drop-image-upload";
+
+interface WhyUrjaPillar {
+  tag: string;
+  headline: string;
+  body: string;
+  image: string;
+  fallbackGradient: string;
+  imageAlt: string;
+  nudge: string;
+}
+
+const DEFAULT_PILLARS: WhyUrjaPillar[] = [
+  {
+    tag: "Zero anxiety",
+    headline: "We treat the person,\nnot just the tooth.",
+    body: "Every visit starts with a conversation. Our pain-free protocols and calm environment make even nervous patients feel at home.",
+    image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=600&q=80",
+    fallbackGradient: "linear-gradient(135deg, #e8d5c0 0%, #d4b896 50%, #c9a97a 100%)",
+    imageAlt: "Patient receiving gentle dental treatment at Urja",
+    nudge: "mt-0",
+  },
+  {
+    tag: "Precision tech",
+    headline: "Diagnosed right\nthe first time.",
+    body: "3D digital scans, intraoral cameras, and AI-assisted analysis — no guesswork, no repeat visits.",
+    image: "https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&w=600&q=80",
+    fallbackGradient: "linear-gradient(135deg, #d6e8d5 0%, #a8ccb0 50%, #7daf8a 100%)",
+    imageAlt: "Advanced digital scanning technology at Urja Dental",
+    nudge: "mt-16 md:mt-24",
+  },
+  {
+    tag: "Honest care",
+    headline: "We tell you what\nyou actually need.",
+    body: "Transparent treatment plans with fixed pricing. No upsells, no unnecessary procedures — ever.",
+    image: "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&w=600&q=80",
+    fallbackGradient: "linear-gradient(135deg, #d5dde8 0%, #96adc9 50%, #7a96b8 100%)",
+    imageAlt: "Urja dental team in a modern clean clinic",
+    nudge: "mt-8 md:mt-12",
+  },
+];
+
+const FALLBACK_GRADIENTS = [
+  "linear-gradient(135deg, #e8d5c0 0%, #d4b896 50%, #c9a97a 100%)",
+  "linear-gradient(135deg, #d6e8d5 0%, #a8ccb0 50%, #7daf8a 100%)",
+  "linear-gradient(135deg, #d5dde8 0%, #96adc9 50%, #7a96b8 100%)",
+  "linear-gradient(135deg, #f0d4e0 0%, #e0a0b8 50%, #d0809a 100%)",
+  "linear-gradient(135deg, #f0e6d0 0%, #e0c8a0 50%, #d0b080 100%)",
+  "linear-gradient(135deg, #d0e0f0 0%, #a0c0e0 50%, #80a0d0 100%)",
+];
 
 export default function HomepageManagerPage() {
   const [heroHeading, setHeroHeading] = useState("Your Smile, Our Passion");
@@ -49,6 +98,75 @@ export default function HomepageManagerPage() {
   const [offerBanner, setOfferBanner] = useState<string | null>(null);
   const [popupImage, setPopupImage] = useState<string | null>(null);
 
+  // ── Why Urja pillars state ──────────────────────────────────────────────
+  const [whyUrjaPillars, setWhyUrjaPillars] = useState<WhyUrjaPillar[]>(DEFAULT_PILLARS);
+  const [whyUrjaSaving, setWhyUrjaSaving] = useState(false);
+  const [whyUrjaLoadError, setWhyUrjaLoadError] = useState(false);
+
+  useEffect(() => {
+    loadWhyUrja();
+  }, []);
+
+  async function loadWhyUrja() {
+    try {
+      const res = await fetch("/api/admin/why-urja");
+      if (!res.ok) throw new Error("Failed to load");
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        setWhyUrjaPillars(json.data);
+      }
+    } catch (e) {
+      console.warn("Could not load Why Urja from API, using defaults", e);
+      setWhyUrjaLoadError(true);
+    }
+  }
+
+  async function saveWhyUrja() {
+    setWhyUrjaSaving(true);
+    try {
+      const res = await fetch("/api/admin/why-urja", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pillars: whyUrjaPillars }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      const json = await res.json();
+      if (json.success) {
+        alert("Why Urja pillars saved successfully!");
+      }
+    } catch (e) {
+      console.error("Failed to save Why Urja pillars", e);
+      alert("Failed to save Why Urja pillars");
+    } finally {
+      setWhyUrjaSaving(false);
+    }
+  }
+
+  function updatePillar(index: number, field: keyof WhyUrjaPillar, value: string) {
+    const updated = [...whyUrjaPillars];
+    updated[index] = { ...updated[index], [field]: value };
+    setWhyUrjaPillars(updated);
+  }
+
+  function addPillar() {
+    setWhyUrjaPillars([
+      ...whyUrjaPillars,
+      {
+        tag: "",
+        headline: "",
+        body: "",
+        image: "",
+        fallbackGradient: FALLBACK_GRADIENTS[whyUrjaPillars.length % FALLBACK_GRADIENTS.length],
+        imageAlt: "",
+        nudge: "mt-0",
+      },
+    ]);
+  }
+
+  function removePillar(index: number) {
+    setWhyUrjaPillars(whyUrjaPillars.filter((_, i) => i !== index));
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -56,16 +174,13 @@ export default function HomepageManagerPage() {
           <h1 className="text-2xl font-bold text-gray-900">Homepage Manager</h1>
           <p className="text-gray-500">Customize your website homepage sections</p>
         </div>
-        <Button>
-          <Save className="mr-2 h-4 w-4" />
-          Save Changes
-        </Button>
       </div>
 
       <Tabs defaultValue="hero" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="hero">Hero Section</TabsTrigger>
           <TabsTrigger value="usp">USP Section</TabsTrigger>
+          <TabsTrigger value="why-urja">Why Urja</TabsTrigger>
           <TabsTrigger value="offers">Offers</TabsTrigger>
           <TabsTrigger value="popup">Popup</TabsTrigger>
         </TabsList>
@@ -199,6 +314,119 @@ export default function HomepageManagerPage() {
                 onClick={() => setUspItems([...uspItems, { icon: "", title: "", description: "" }])}
               >
                 <Plus className="mr-2 h-4 w-4" /> Add USP
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* ─────────────────────────────────────────────────────────────── */}
+        {/* Why Urja Tab */}
+        {/* ─────────────────────────────────────────────────────────────── */}
+        <TabsContent value="why-urja" className="space-y-6 mt-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg">Why Urja Section</CardTitle>
+                  <CardDescription>
+                    The three pillars displayed on the homepage — "Why choose us" cards with image, tag, headline, and body text
+                  </CardDescription>
+                </div>
+                <Button onClick={saveWhyUrja} disabled={whyUrjaSaving}>
+                  <Save className="mr-2 h-4 w-4" />
+                  {whyUrjaSaving ? "Saving..." : "Save Pillars"}
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {whyUrjaPillars.map((pillar, idx) => (
+                <div key={idx} className="border rounded-lg p-5 space-y-4 bg-gray-50">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-sm text-gray-700">Pillar #{idx + 1}</h3>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removePillar(idx)}
+                      disabled={whyUrjaPillars.length <= 1}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Tag (e.g. "Zero anxiety")</Label>
+                      <Input
+                        placeholder="Pillar tag"
+                        value={pillar.tag}
+                        onChange={(e) => updatePillar(idx, "tag", e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Nudge (e.g. "mt-0", "mt-16 md:mt-24")</Label>
+                      <Input
+                        placeholder="Tailwind margin class for stagger"
+                        value={pillar.nudge}
+                        onChange={(e) => updatePillar(idx, "nudge", e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Headline (use \n for line breaks)</Label>
+                    <Textarea
+                      placeholder="Headline text"
+                      value={pillar.headline}
+                      onChange={(e) => updatePillar(idx, "headline", e.target.value)}
+                      rows={2}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Body Text</Label>
+                    <Textarea
+                      placeholder="Body description"
+                      value={pillar.body}
+                      onChange={(e) => updatePillar(idx, "body", e.target.value)}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Image URL</Label>
+                    <Input
+                      placeholder="https://images.unsplash.com/..."
+                      value={pillar.image}
+                      onChange={(e) => updatePillar(idx, "image", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Image Alt Text</Label>
+                    <Input
+                      placeholder="Descriptive alt text for the image"
+                      value={pillar.imageAlt}
+                      onChange={(e) => updatePillar(idx, "imageAlt", e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Fallback Gradient CSS</Label>
+                    <Input
+                      placeholder="linear-gradient(...)"
+                      value={pillar.fallbackGradient}
+                      onChange={(e) => updatePillar(idx, "fallbackGradient", e.target.value)}
+                    />
+                    <div
+                      className="h-6 w-full rounded-md mt-1"
+                      style={{ background: pillar.fallbackGradient }}
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <Button variant="outline" size="sm" onClick={addPillar}>
+                <Plus className="mr-2 h-4 w-4" /> Add Pillar
               </Button>
             </CardContent>
           </Card>

@@ -512,6 +512,29 @@ model HomepagePopup {
 }
 
 // ============================================================================
+// Why Urja Section (3 pillars)
+// ============================================================================
+
+model WhyUrjaPillar {
+  id              String   @id @default(cuid())
+  order           Int      @default(0)
+  tag             String
+  headline        String
+  body            String
+  image           String
+  fallbackGradient String
+  imageAlt        String
+  nudge           String   @default("mt-0")
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+  @@index([isActive])
+  @@map("why_urja_pillars")
+}
+
+// ============================================================================
 // Page Content Manager
 // ============================================================================
 

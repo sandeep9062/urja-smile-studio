@@ -450,6 +450,26 @@ export const updateSettingsSchema = z
 export type UpdateSettingsInput = z.infer<typeof updateSettingsSchema>;
 
 // ---------------------------------------------------------------------------
+// Why Urja Pillars
+// ---------------------------------------------------------------------------
+
+export const whyUrjaPillarSchema = z.object({
+  tag: z.string().trim().min(1, "Tag is required").max(80),
+  headline: z.string().trim().min(1, "Headline is required").max(300),
+  body: z.string().trim().min(1, "Body text is required").max(2000),
+  image: z.string().trim().min(1, "Image URL is required").max(2048),
+  fallbackGradient: z.string().trim().min(1).max(500).optional().default("linear-gradient(135deg, #e8d5c0 0%, #d4b896 50%, #c9a97a 100%)"),
+  imageAlt: z.string().trim().min(1, "Image alt text is required").max(300),
+  nudge: z.string().trim().max(100).optional().default("mt-0"),
+});
+export type WhyUrjaPillarInput = z.infer<typeof whyUrjaPillarSchema>;
+
+export const updateWhyUrjaSchema = z.object({
+  pillars: z.array(whyUrjaPillarSchema).min(1, "At least one pillar is required").max(10),
+});
+export type UpdateWhyUrjaInput = z.infer<typeof updateWhyUrjaSchema>;
+
+// ---------------------------------------------------------------------------
 // Redirects
 // ---------------------------------------------------------------------------
 
