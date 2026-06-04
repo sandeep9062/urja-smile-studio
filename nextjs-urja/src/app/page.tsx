@@ -35,32 +35,32 @@ export default function HomePage() {
           className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-primary/10 blur-3xl"
           aria-hidden
         />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-28 grid md:grid-cols-2 gap-12 items-center">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-28 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full bg-accent/70 px-3 py-1 text-xs font-medium text-primary">
               <Smile className="h-3.5 w-3.5" /> Trusted by 25,000+ smiles
             </span>
-            <h1 className="mt-5 text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight">
+            <h1 className="mt-4 md:mt-5 text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.1] md:leading-[1.05] tracking-tight">
               Your Smile,{" "}
               <span className="bg-gradient-coral bg-clip-text text-transparent">Our Priority.</span>
             </h1>
-            <p className="mt-5 text-lg text-muted-foreground max-w-lg">
+            <p className="mt-4 md:mt-5 text-base md:text-lg text-muted-foreground max-w-lg">
               Warm, modern dentistry for the whole family. From your first cleaning to complete
               smile makeovers — gentle care, world-class results.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="shadow-soft">
+            <div className="mt-6 md:mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="shadow-soft w-full sm:w-auto">
                 <Link href="/book-appointment">
                   <Calendar className="mr-2 h-4 w-4" /> Book Appointment
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
                 <Link href="/services">
                   Explore Services <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
-            <div className="mt-8 flex items-center gap-6 text-sm text-muted-foreground">
+            <div className="mt-6 md:mt-8 flex items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-coral text-coral" />
@@ -81,15 +81,15 @@ export default function HomePage() {
               width={800}
               height={520}
               priority
-              className="relative w-full h-[420px] md:h-[520px] object-cover rounded-3xl shadow-soft"
+              className="relative w-full h-[300px] sm:h-[420px] md:h-[520px] object-cover rounded-3xl shadow-soft"
             />
-            <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-2xl p-4 shadow-soft hidden sm:flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Award className="h-5 w-5" />
+            <div className="absolute -bottom-4 md:-bottom-6 -left-3 md:-left-6 bg-card border border-border rounded-xl md:rounded-2xl p-3 md:p-4 shadow-soft hidden sm:flex items-center gap-3">
+              <div className="flex h-8 md:h-10 w-8 md:w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Award className="h-4 md:h-5 w-4 md:w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Trusted since</p>
-                <p className="text-sm font-semibold">2003 • 22 Years</p>
+                <p className="text-[10px] md:text-xs text-muted-foreground">Trusted since</p>
+                <p className="text-xs md:text-sm font-semibold">2003 • 22 Years</p>
               </div>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function HomePage() {
 
       {/* USP STRIP */}
       <section className="border-y border-border bg-card">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-3 lg:grid-cols-3 gap-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           {USPS.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex items-start gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent/60 text-primary">
@@ -117,7 +117,7 @@ export default function HomePage() {
 
 
       {/* SERVICES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
             Our Services
@@ -159,7 +159,7 @@ export default function HomePage() {
 
       {/* DOCTORS */}
       <section className="bg-card border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
@@ -203,7 +203,7 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
             Patient Stories
@@ -224,9 +224,11 @@ export default function HomePage() {
                   &ldquo;{t.review}&rdquo;
                 </p>
                 <div className="mt-5 pt-5 border-t border-border flex items-center gap-3">
-                  <img
+                  <Image
                     src={t.image}
                     alt={t.name}
+                    width={40}
+                    height={40}
                     className="h-10 w-10 rounded-full object-cover ring-2 ring-coral/20"
                   />
                   <div>
@@ -248,18 +250,20 @@ export default function HomePage() {
       </section>
 
   <section className="bg-card border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-2xl md:text-3xl font-bold">Video stories</h2>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Video stories</h2>
           <p className="mt-2 text-muted-foreground">Real patients, in their own words.</p>
-          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="mt-6 sm:mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
                 className="relative rounded-2xl overflow-hidden border border-border group cursor-pointer"
               >
-                <img
+                <Image
                   src={`https://picsum.photos/seed/video-${i}/600/400`}
                   alt={`Video testimonial ${i}`}
+                  width={600}
+                  height={400}
                   className="h-56 w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-foreground/40 group-hover:bg-foreground/30 transition flex items-center justify-center">
@@ -275,7 +279,7 @@ export default function HomePage() {
 
       {/* GALLERY PREVIEW */}
       <section className="bg-gradient-soft border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="flex items-end justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
@@ -289,7 +293,7 @@ export default function HomePage() {
               <Link href="/gallery">View Full Gallery</Link>
             </Button>
           </div>
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="mt-8 sm:mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="rounded-2xl overflow-hidden border border-border bg-card">
                 <div className="grid grid-cols-2">
@@ -299,7 +303,7 @@ export default function HomePage() {
                       alt="Before treatment"
                       width={400}
                       height={192}
-                      className="h-48 w-full object-cover"
+                      className="h-32 sm:h-48 w-full object-cover"
                     />
                     <span className="absolute top-2 left-2 bg-foreground/80 text-background text-[10px] font-bold uppercase px-2 py-0.5 rounded">
                       Before
@@ -311,7 +315,7 @@ export default function HomePage() {
                       alt="After treatment"
                       width={400}
                       height={192}
-                      className="h-48 w-full object-cover"
+                      className="h-32 sm:h-48 w-full object-cover"
                     />
                     <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold uppercase px-2 py-0.5 rounded">
                       After
@@ -325,18 +329,18 @@ export default function HomePage() {
       </section>
 
       {/* TRUST */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-6 text-center">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 text-center">
           {[
             { icon: Award, value: "22+", label: "Years in practice" },
             { icon: Users, value: "25K+", label: "Happy patients" },
             { icon: Star, value: "4.9", label: "Google rating" },
       
           ].map(({ icon: Icon, value, label }) => (
-            <div key={label} className="rounded-2xl border border-border p-6 bg-card">
-              <Icon className="h-6 w-6 mx-auto text-primary" />
-              <p className="mt-3 text-3xl font-bold">{value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{label}</p>
+            <div key={label} className="rounded-xl sm:rounded-2xl border border-border p-4 sm:p-6 bg-card">
+              <Icon className="h-5 sm:h-6 w-5 sm:w-6 mx-auto text-primary" />
+              <p className="mt-2 sm:mt-3 text-xl sm:text-3xl font-bold">{value}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">{label}</p>
             </div>
           ))}
         </div>
@@ -344,7 +348,7 @@ export default function HomePage() {
 
       {/* LOCATION */}
       <section className="bg-card border-t border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid md:grid-cols-2 gap-10 items-center">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 grid md:grid-cols-2 gap-8 md:gap-10 items-center">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold">Visit us</h2>
             <p className="mt-3 text-muted-foreground">{CLINIC.hours}</p>

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export const WhyUrja: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-soft py-10 px-4 md:py-16 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-gradient-soft py-8 px-4 md:py-16 sm:px-6 lg:px-8">
       {/* Decorative glows */}
       <div
         className="absolute top-0 right-0 -z-10 h-80 w-80 rounded-full bg-coral/10 blur-3xl"
@@ -41,8 +41,8 @@ export const WhyUrja: React.FC = () => {
         </div>
 
         {/* ── Image Banner (98% width) ── */}
-        <div className="mx-auto w-[98%] relative group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-xl hover:border-primary/30">
-          <div className="relative aspect-[21/9] w-full">
+        <div className="mx-auto w-full sm:w-[98%] relative group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-xl hover:border-primary/30">
+          <div className="relative aspect-[4/3] sm:aspect-[21/9] w-full">
             <Image
               src="/assets/why-urja.png"
               alt="Urja Dental - Conventional vs Holistic Dentistry Comparison"
@@ -60,7 +60,7 @@ export const WhyUrja: React.FC = () => {
         </p>
 
         {/* ── Key Value Props ── */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+        <div className="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
           <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:shadow-soft transition">
             <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <ShieldCheck className="h-5 w-5" />
@@ -90,7 +90,7 @@ export const WhyUrja: React.FC = () => {
         </div>
 
         {/* ── CTA ── */}
-        <div className="mt-8 text-center">
+        <div className="mt-6 sm:mt-8 text-center">
           <Button asChild size="lg" className="shadow-soft">
             <Link href="/book-appointment">
               Experience Holistic Care <ArrowRight className="ml-2 h-4 w-4" />

@@ -87,7 +87,7 @@ export default function ContactPage() {
         subtitle="We'd love to hear from you."
         crumbs={[{ label: "Contact" }]}
       />
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-2 gap-10">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 grid lg:grid-cols-2 gap-8 md:gap-10">
         <div className="space-y-8">
           {[
             { icon: MapPin, title: "Visit us", body: CLINIC.address },
@@ -130,9 +130,9 @@ export default function ContactPage() {
         <form
           onSubmit={onSubmit}
           noValidate
-          className="rounded-3xl border border-border bg-card p-6 md:p-10 shadow-soft space-y-4 h-fit"
+          className="rounded-2xl sm:rounded-3xl border border-border bg-card p-5 sm:p-6 md:p-10 shadow-soft space-y-4 h-fit"
         >
-          <h2 className="text-2xl font-bold">Send us a message</h2>
+          <h2 className="text-xl sm:text-2xl font-bold">Send us a message</h2>
           <p className="text-sm text-muted-foreground">
             We typically respond within one business day.
           </p>

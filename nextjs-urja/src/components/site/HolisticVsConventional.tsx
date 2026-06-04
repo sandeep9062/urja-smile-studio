@@ -12,15 +12,15 @@ import {
 
 export default function HolisticVsConventional() {
   return (
-    <section className="w-full bg-gradient-soft py-16 px-4 md:py-24 sm:px-6 lg:px-8">
+    <section className="w-full bg-gradient-soft py-12 px-4 md:py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* ── Header ── */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/70 px-3 py-1 text-xs font-medium text-primary tracking-wide">
             <Sparkles className="h-3.5 w-3.5" />
             Only Holistic Dentistry Clinic in Tricity
           </span>
-          <h2 className="mt-5 text-3xl md:text-5xl font-bold leading-tight tracking-tight">
+          <h2 className="mt-4 md:mt-5 text-2xl sm:text-3xl md:text-5xl font-bold leading-tight tracking-tight">
             Your Natural Tooth is
             Precious.
             <br />
@@ -28,7 +28,7 @@ export default function HolisticVsConventional() {
               Once Lost, It Cannot Regenerate.
             </span>
           </h2>
-          <p className="mt-5 text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <p className="mt-4 md:mt-5 text-sm sm:text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
             At Urja Dental, we carefully preserve your natural tooth and help
             avoid unnecessary root canals through specialized holistic dentistry
             and acupuncture protocols.
@@ -38,7 +38,7 @@ export default function HolisticVsConventional() {
         {/* ── Split Comparison Card ── */}
         <div className="grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden shadow-soft border border-border bg-card">
           {/* ── LEFT: Conventional ── */}
-          <div className="relative p-8 md:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-border bg-background">
+          <div className="relative p-6 sm:p-8 md:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-border bg-background">
             <div>
               {/* Icon + Title */}
               <div className="flex items-center gap-3 mb-6">
@@ -105,7 +105,7 @@ export default function HolisticVsConventional() {
           </div>
 
           {/* ── RIGHT: Urja Holistic ── */}
-          <div className="relative p-8 md:p-12 flex flex-col justify-between bg-gradient-to-br from-accent/40 via-background to-accent/20 overflow-hidden">
+          <div className="relative p-6 sm:p-8 md:p-12 flex flex-col justify-between bg-gradient-to-br from-accent/40 via-background to-accent/20 overflow-hidden">
             {/* Decorative glows */}
             <div
               className="absolute -top-10 -right-10 h-48 w-48 rounded-full bg-primary/10 blur-3xl"
@@ -188,8 +188,8 @@ export default function HolisticVsConventional() {
         </div>
 
         {/* ── Footer Tagline ── */}
-        <div className="mt-12 text-center">
-          <p className="text-xl md:text-2xl font-bold tracking-wide">
+        <div className="mt-8 md:mt-12 text-center">
+          <p className="text-lg sm:text-xl md:text-2xl font-bold tracking-wide">
             Save the Tooth Naturally.
           </p>
           <div className="mt-2 h-1 w-20 bg-gradient-coral mx-auto rounded-full" />

@@ -2,6 +2,7 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle2, Calendar } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -42,8 +43,8 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
         crumbs={[{ label: "Services", to: "/services" }, { label: service.title }]}
       />
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 space-y-12">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 grid lg:grid-cols-3 gap-8 md:gap-10">
+        <div className="lg:col-span-2 space-y-10 md:space-y-12">
           <div>
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-coral text-primary-foreground">
               <Icon className="h-7 w-7" />
@@ -80,27 +81,31 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
 
           <div>
             <h2 className="text-2xl font-bold">Before & After</h2>
-            <div className="mt-5 grid sm:grid-cols-3 gap-4">
+            <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
                   className="rounded-2xl overflow-hidden border border-border grid grid-cols-2"
                 >
                   <div className="relative">
-                    <img
+                    <Image
                       src={`https://picsum.photos/seed/${service.slug}-b-${i}/300/300`}
                       alt="Before"
-                      className="h-32 w-full object-cover"
+                      width={150}
+                      height={128}
+                      className="h-24 sm:h-32 w-full object-cover"
                     />
                     <span className="absolute top-1.5 left-1.5 text-[9px] font-bold bg-foreground/80 text-background px-1.5 py-0.5 rounded">
                       BEFORE
                     </span>
                   </div>
                   <div className="relative">
-                    <img
+                    <Image
                       src={`https://picsum.photos/seed/${service.slug}-a-${i}/300/300`}
                       alt="After"
-                      className="h-32 w-full object-cover"
+                      width={150}
+                      height={128}
+                      className="h-24 sm:h-32 w-full object-cover"
                     />
                     <span className="absolute top-1.5 left-1.5 text-[9px] font-bold bg-primary text-primary-foreground px-1.5 py-0.5 rounded">
                       AFTER
@@ -124,7 +129,7 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
+        <aside className="lg:sticky lg:top-24 lg:self-start order-first lg:order-last">
           <ConsultationForm serviceTitle={service.title} />
         </aside>
       </section>

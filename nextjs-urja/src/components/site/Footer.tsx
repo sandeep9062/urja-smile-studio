@@ -61,7 +61,6 @@ export function Footer() {
       setMessage("Network error. Please try again.");
     }
 
-    // Reset status after 4 seconds
     setTimeout(() => {
       setStatus("idle");
       setMessage("");
@@ -69,8 +68,9 @@ export function Footer() {
   }
 
   return (
-    <footer className="mt-24 border-t border-border bg-card">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="mt-16 sm:mt-24 border-t border-border bg-card">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14 grid gap-8 sm:gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Column 1 - Brand */}
         <div>
           <Link href="/" className="flex items-center gap-2">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-coral text-primary-foreground">
@@ -87,7 +87,7 @@ export function Footer() {
             Warm, modern dentistry in the heart of the city. Trusted by families for over two
             decades.
           </p>
-          <div className="mt-5 flex gap-3">
+          <div className="mt-5 flex gap-2 sm:gap-3">
             <a
               href="https://instagram.com"
               target="_blank"
@@ -127,6 +127,7 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Column 2 - Quick Links */}
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
             Quick Links
@@ -150,6 +151,7 @@ export function Footer() {
           </ul>
         </div>
 
+        {/* Column 3 - Contact */}
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
             Contact
@@ -174,6 +176,7 @@ export function Footer() {
           </ul>
         </div>
 
+        {/* Column 4 - Newsletter */}
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
             Stay Updated
@@ -182,7 +185,6 @@ export function Footer() {
             Subscribe to our newsletter for dental tips, special offers, and clinic updates.
           </p>
           <form onSubmit={handleSubscribe} className="mt-4 space-y-3">
-            {/* Honeypot — hidden from real users */}
             <input
               type="text"
               name="website"
@@ -238,7 +240,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {CLINIC.name}. All rights reserved.
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             <a href="#" className="hover:text-primary">
               Privacy Policy
             </a>

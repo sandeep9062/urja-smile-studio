@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Heart, MessageCircle, Instagram } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -32,8 +33,8 @@ export default function SocialPage() {
         crumbs={[{ label: "Social" }]}
       />
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 sm:mb-10">
           <div className="flex items-center gap-4">
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-coral text-primary-foreground">
               <Instagram className="h-7 w-7" />
@@ -56,9 +57,11 @@ export default function SocialPage() {
               key={p.id}
               className="group relative rounded-2xl overflow-hidden border border-border bg-card aspect-square"
             >
-              <img
+              <Image
                 src={p.image}
                 alt={p.caption}
+                width={500}
+                height={500}
                 className="h-full w-full object-cover group-hover:scale-105 transition duration-500"
               />
               <div className="absolute inset-0 bg-foreground/60 opacity-0 group-hover:opacity-100 transition flex flex-col items-center justify-center text-background p-4 text-center">

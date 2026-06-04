@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Star, GraduationCap, Calendar } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
@@ -12,13 +13,13 @@ export default function DoctorsPage() {
         subtitle="A specialist for every smile — meet the team behind Urja Dental."
         crumbs={[{ label: "Doctors" }]}
       />
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {DOCTORS.map((d) => (
           <article
             key={d.slug}
             className="rounded-3xl overflow-hidden border border-border bg-card hover:shadow-soft transition"
           >
-            <img src={d.image} alt={`Portrait of ${d.name}`} className="h-80 w-full object-cover" />
+            <Image src={d.image} alt={`Portrait of ${d.name}`} width={400} height={400} className="h-64 sm:h-80 w-full object-cover" />
             <div className="p-6">
               <h2 className="text-xl font-bold">{d.name}</h2>
               <p className="text-sm text-primary font-medium mt-1">{d.specialization}</p>

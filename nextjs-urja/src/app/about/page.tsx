@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle2, Target, Eye, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,15 +14,17 @@ export default function AboutPage() {
         crumbs={[{ label: "About" }]}
       />
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <img
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        <Image
           src="https://picsum.photos/seed/urja-clinic/900/700"
           alt="Urja Dental Clinic reception"
-          className="rounded-3xl object-cover w-full h-[420px] shadow-soft"
+          width={900}
+          height={700}
+          className="rounded-3xl object-cover w-full h-[280px] sm:h-[420px] shadow-soft"
         />
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Our Story</p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-bold">Dentistry, reimagined with warmth</h2>
+          <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold">Dentistry, reimagined with warmth</h2>
           <p className="mt-5 text-muted-foreground leading-relaxed">
             Founded in 2003 by Dr. Urja Sharma, our clinic was built on a simple promise — every
             patient deserves expert care delivered with empathy, in a space that feels safe.
@@ -48,7 +51,7 @@ export default function AboutPage() {
       <HolisticVsConventional />
 
       <section className="bg-card border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 grid md:grid-cols-2 gap-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20 grid md:grid-cols-2 gap-6">
           {[
             {
               icon: Eye,
@@ -74,16 +77,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
             Infrastructure
           </p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-bold">
+          <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold">
             A clinic that feels like a calm retreat
           </h2>
         </div>
-        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="mt-8 sm:mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
             { src: "facility-1", cap: "Reception & waiting lounge" },
             { src: "facility-2", cap: "Surgical suite" },
@@ -96,10 +99,12 @@ export default function AboutPage() {
               key={f.src}
               className="rounded-2xl overflow-hidden border border-border bg-card"
             >
-              <img
+              <Image
                 src={`https://picsum.photos/seed/${f.src}/600/400`}
                 alt={f.cap}
-                className="h-56 w-full object-cover"
+                width={600}
+                height={400}
+                className="h-40 sm:h-56 w-full object-cover"
               />
               <figcaption className="p-4 text-sm font-medium text-foreground">{f.cap}</figcaption>
             </figure>
@@ -128,14 +133,14 @@ export default function AboutPage() {
         </div>
       </section> */}
 
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold">
             Safety First
           </p>
-          <h2 className="mt-3 text-3xl md:text-4xl font-bold">Sterilization & safety standards</h2>
+          <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold">Sterilization & safety standards</h2>
         </div>
-        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="mt-8 sm:mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
             {
               icon: CheckCircle2,

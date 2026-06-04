@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Check, Calendar, User, Stethoscope, Clock, Video, Building } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -76,7 +77,6 @@ export default function BookPage() {
       website: "", // honeypot
     };
 
-    // Client-side Zod validation — same schema the server uses.
     const parsed = appointmentBookingSchema.safeParse(payload);
     if (!parsed.success) {
       const errs: Record<string, string> = {};
@@ -123,12 +123,12 @@ export default function BookPage() {
     return (
       <>
         <PageHeader title="Appointment Confirmed" crumbs={[{ label: "Book Appointment" }]} />
-        <section className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-16">
-          <div className="rounded-3xl border border-border bg-card p-10 text-center shadow-soft">
+        <section className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="rounded-2xl sm:rounded-3xl border border-border bg-card p-6 sm:p-10 text-center shadow-soft">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground">
               <Check className="h-8 w-8" />
             </div>
-            <h2 className="mt-5 text-2xl font-bold">Thank you, {form.name.split(" ")[0]}!</h2>
+            <h2 className="mt-4 sm:mt-5 text-xl sm:text-2xl font-bold">Thank you, {form.name.split(" ")[0]}!</h2>
             <p className="mt-2 text-muted-foreground">
               Your appointment request has been received. We'll confirm via WhatsApp within 2 hours.
             </p>
@@ -154,10 +154,11 @@ export default function BookPage() {
         crumbs={[{ label: "Book Appointment" }]}
       />
 
-      <section className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-        <ol className="flex items-center justify-between mb-10">
+      <section className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Steps Progress Bar - Horizontal scroll on very small screens */}
+        <ol className="flex items-center justify-between mb-8 sm:mb-10">
           {STEPS.map((s, i) => (
-            <li key={s.id} className="flex-1 flex items-center">
+            <li key={s.id} className="flex-1 flex items-center min-w-0">
               <div
                 className={cn(
                   "flex flex-col items-center gap-2",
@@ -166,7 +167,7 @@ export default function BookPage() {
               >
                 <span
                   className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-full border-2 transition",
+                    "flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full border-2 transition",
                     step > s.id
                       ? "bg-primary text-primary-foreground border-primary"
                       : step === s.id
@@ -174,13 +175,13 @@ export default function BookPage() {
                         : "bg-background border-border",
                   )}
                 >
-                  {step > s.id ? <Check className="h-4 w-4" /> : <s.icon className="h-4 w-4" />}
+                  {step > s.id ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <s.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
                 </span>
-                <span className="text-xs font-medium hidden sm:block">{s.label}</span>
+                <span className="text-[10px] sm:text-xs font-medium hidden sm:block">{s.label}</span>
               </div>
               {i < STEPS.length - 1 && (
                 <div
-                  className={cn("flex-1 h-0.5 mx-2", step > s.id ? "bg-primary" : "bg-border")}
+                  className={cn("flex-1 h-0.5 mx-1 sm:mx-2", step > s.id ? "bg-primary" : "bg-border")}
                 />
               )}
             </li>
@@ -190,14 +191,14 @@ export default function BookPage() {
         <form
           onSubmit={submit}
           noValidate
-          className="rounded-3xl border border-border bg-card p-6 md:p-10 shadow-soft"
+          className="rounded-2xl sm:rounded-3xl border border-border bg-card p-5 sm:p-6 md:p-10 shadow-soft"
         >
           {/* Honeypot */}
           <input type="text" name="website" tabIndex={-1} autoComplete="off" className="absolute -left-[9999px] h-0 w-0 opacity-0" aria-hidden />
 
           {step === 1 && (
             <div>
-              <h2 className="text-xl font-bold">How would you like to consult?</h2>
+              <h2 className="text-lg sm:text-xl font-bold">How would you like to consult?</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 Choose between a video consultation from home or visiting the clinic in person.
               </p>
@@ -206,14 +207,14 @@ export default function BookPage() {
                   type="button"
                   onClick={() => update("consultationType", "VIDEO")}
                   className={cn(
-                    "flex flex-col items-center gap-3 rounded-xl border-2 p-6 text-left transition",
+                    "flex flex-col items-center gap-3 rounded-xl border-2 p-5 sm:p-6 text-left transition",
                     form.consultationType === "VIDEO"
                       ? "border-primary bg-accent"
                       : "border-border hover:border-primary/40",
                   )}
                 >
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-purple-600">
-                    <Video className="h-7 w-7" />
+                  <span className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                    <Video className="h-6 w-6 sm:h-7 sm:w-7" />
                   </span>
                   <div className="text-center">
                     <p className="font-semibold">Video Consultation</p>
@@ -224,14 +225,14 @@ export default function BookPage() {
                   type="button"
                   onClick={() => update("consultationType", "PHYSICAL")}
                   className={cn(
-                    "flex flex-col items-center gap-3 rounded-xl border-2 p-6 text-left transition",
+                    "flex flex-col items-center gap-3 rounded-xl border-2 p-5 sm:p-6 text-left transition",
                     form.consultationType === "PHYSICAL"
                       ? "border-primary bg-accent"
                       : "border-border hover:border-primary/40",
                   )}
                 >
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-orange-600">
-                    <Building className="h-7 w-7" />
+                  <span className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                    <Building className="h-6 w-6 sm:h-7 sm:w-7" />
                   </span>
                   <div className="text-center">
                     <p className="font-semibold">Physical Visit</p>
@@ -245,8 +246,8 @@ export default function BookPage() {
 
           {step === 2 && (
             <div>
-              <h2 className="text-xl font-bold">What can we help with?</h2>
-              <div className="mt-6 grid sm:grid-cols-2 gap-3">
+              <h2 className="text-lg sm:text-xl font-bold">What can we help with?</h2>
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {SERVICES.map((s) => (
                   <button
                     type="button"
@@ -259,7 +260,7 @@ export default function BookPage() {
                         : "border-border hover:border-primary/40",
                     )}
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-coral text-primary-foreground">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-coral text-primary-foreground shrink-0">
                       <s.icon className="h-5 w-5" />
                     </span>
                     <span className="font-medium text-sm">{s.title}</span>
@@ -272,8 +273,8 @@ export default function BookPage() {
 
           {step === 3 && (
             <div>
-              <h2 className="text-xl font-bold">Choose your doctor</h2>
-              <div className="mt-6 grid sm:grid-cols-2 gap-3">
+              <h2 className="text-lg sm:text-xl font-bold">Choose your doctor</h2>
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => update("doctor", "Any available")}
@@ -299,10 +300,10 @@ export default function BookPage() {
                         : "border-border hover:border-primary/40",
                     )}
                   >
-                    <img src={d.image} alt="" className="h-12 w-12 rounded-full object-cover" />
-                    <div>
-                      <p className="font-semibold text-sm">{d.name}</p>
-                      <p className="text-xs text-muted-foreground">{d.specialization}</p>
+                    <Image src={d.image} alt="" width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover" />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-sm truncate">{d.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{d.specialization}</p>
                     </div>
                   </button>
                 ))}
@@ -313,7 +314,7 @@ export default function BookPage() {
 
           {step === 4 && (
             <div>
-              <h2 className="text-xl font-bold">Pick a date & time</h2>
+              <h2 className="text-lg sm:text-xl font-bold">Pick a date & time</h2>
               <div className="mt-6 grid sm:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="date">Preferred date</Label>
@@ -337,7 +338,7 @@ export default function BookPage() {
                         key={t}
                         onClick={() => update("time", t)}
                         className={cn(
-                          "rounded-lg border px-3 py-2 text-sm transition",
+                          "rounded-lg border px-2 sm:px-3 py-2 text-xs sm:text-sm transition",
                           form.time === t
                             ? "border-primary bg-primary text-primary-foreground"
                             : "border-border hover:border-primary/40",
@@ -355,7 +356,7 @@ export default function BookPage() {
 
           {step === 5 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-bold">Your details</h2>
+              <h2 className="text-lg sm:text-xl font-bold">Your details</h2>
               <div>
                 <Label htmlFor="name">Full name</Label>
                 <Input

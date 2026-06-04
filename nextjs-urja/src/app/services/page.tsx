@@ -12,7 +12,7 @@ export default function ServicesPage() {
         subtitle="World-class dental care for every age and every need."
         crumbs={[{ label: "Services" }]}
       />
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {SERVICES.map(({ slug, title, short, image }) => (
           <article
             key={slug}
