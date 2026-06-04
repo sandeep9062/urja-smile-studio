@@ -217,6 +217,11 @@ model BeforeAfterPhoto {
 // Appointment Management
 // ============================================================================
 
+enum ConsultationType {
+  VIDEO
+  PHYSICAL
+}
+
 enum AppointmentStatus {
   pending
   confirmed
@@ -226,24 +231,26 @@ enum AppointmentStatus {
 }
 
 model Appointment {
-  id            String            @id @default(cuid())
-  patientName   String
-  patientPhone  String
-  patientEmail  String
-  patientId     String?
-  patient       Patient?          @relation(fields: [patientId], references: [id], onDelete: SetNull)
-  serviceId     String?
-  service       Service?          @relation(fields: [serviceId], references: [id], onDelete: SetNull)
-  doctorId      String?
-  doctor        Doctor?           @relation(fields: [doctorId], references: [id], onDelete: SetNull)
-  date          DateTime
-  time          String
-  status        AppointmentStatus @default(pending)
-  notes         String?
-  createdById   String?
-  createdBy     User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  id               String            @id @default(cuid())
+  patientName      String
+  patientPhone     String
+  patientEmail     String
+  patientId        String?
+  patient          Patient?          @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  serviceId        String?
+  service          Service?          @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  doctorId         String?
+  doctor           Doctor?           @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  date             DateTime
+  time             String
+  status           AppointmentStatus @default(pending)
+  consultationType ConsultationType  @default(PHYSICAL)
+  videoRoomId      String?
+  notes            String?
+  createdById      String?
+  createdBy        User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
   @@index([date])
   @@index([status])

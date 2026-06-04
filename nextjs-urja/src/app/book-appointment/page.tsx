@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Check, Calendar, User, Stethoscope, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, Calendar, User, Stethoscope, Clock, Video, Building } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ const TIME_SLOTS = [
 ];
 
 type FormState = {
+  consultationType: "VIDEO" | "PHYSICAL" | "";
   service: string;
   doctor: string;
   date: string;
@@ -29,10 +30,11 @@ type FormState = {
 };
 
 const STEPS = [
-  { id: 1, label: "Service", icon: Stethoscope },
-  { id: 2, label: "Doctor", icon: User },
-  { id: 3, label: "Date & Time", icon: Calendar },
-  { id: 4, label: "Details", icon: Clock },
+  { id: 1, label: "Consultation", icon: Video },
+  { id: 2, label: "Service", icon: Stethoscope },
+  { id: 3, label: "Doctor", icon: User },
+  { id: 4, label: "Date & Time", icon: Calendar },
+  { id: 5, label: "Details", icon: Clock },
 ];
 
 export default function BookPage() {
@@ -41,7 +43,7 @@ export default function BookPage() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState<FormState>({
-    service: "", doctor: "", date: "", time: "",
+    consultationType: "", service: "", doctor: "", date: "", time: "",
     name: "", phone: "", email: "", complaint: "",
   });
   const [done, setDone] = useState(false);
@@ -49,9 +51,10 @@ export default function BookPage() {
   const update = (k: keyof FormState, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   const canNext = () => {
-    if (step === 1) return !!form.service;
-    if (step === 2) return !!form.doctor;
-    if (step === 3) return !!form.date && !!form.time;
+    if (step === 1) return !!form.consultationType;
+    if (step === 2) return !!form.service;
+    if (step === 3) return !!form.doctor;
+    if (step === 4) return !!form.date && !!form.time;
     return true;
   };
 
@@ -63,6 +66,7 @@ export default function BookPage() {
     const payload = {
       service: form.service,
       doctor: form.doctor,
+      consultationType: form.consultationType as "VIDEO" | "PHYSICAL",
       date: form.date,
       time: form.time,
       name: form.name,
@@ -129,6 +133,7 @@ export default function BookPage() {
               Your appointment request has been received. We'll confirm via WhatsApp within 2 hours.
             </p>
             <dl className="mt-8 text-left rounded-2xl bg-muted p-6 space-y-3 text-sm">
+              <Row label="Type" value={form.consultationType === "VIDEO" ? "Video Consultation" : "Physical Visit"} />
               <Row label="Service" value={form.service} />
               <Row label="Doctor" value={form.doctor} />
               <Row label="Date" value={form.date} />
@@ -145,7 +150,7 @@ export default function BookPage() {
     <>
       <PageHeader
         title="Book an Appointment"
-        subtitle="Four quick steps — under a minute."
+        subtitle="Five quick steps — under a minute."
         crumbs={[{ label: "Book Appointment" }]}
       />
 
@@ -192,6 +197,54 @@ export default function BookPage() {
 
           {step === 1 && (
             <div>
+              <h2 className="text-xl font-bold">How would you like to consult?</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Choose between a video consultation from home or visiting the clinic in person.
+              </p>
+              <div className="mt-6 grid sm:grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => update("consultationType", "VIDEO")}
+                  className={cn(
+                    "flex flex-col items-center gap-3 rounded-xl border-2 p-6 text-left transition",
+                    form.consultationType === "VIDEO"
+                      ? "border-primary bg-accent"
+                      : "border-border hover:border-primary/40",
+                  )}
+                >
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                    <Video className="h-7 w-7" />
+                  </span>
+                  <div className="text-center">
+                    <p className="font-semibold">Video Consultation</p>
+                    <p className="text-xs text-muted-foreground mt-1">Consult from the comfort of your home</p>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => update("consultationType", "PHYSICAL")}
+                  className={cn(
+                    "flex flex-col items-center gap-3 rounded-xl border-2 p-6 text-left transition",
+                    form.consultationType === "PHYSICAL"
+                      ? "border-primary bg-accent"
+                      : "border-border hover:border-primary/40",
+                  )}
+                >
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                    <Building className="h-7 w-7" />
+                  </span>
+                  <div className="text-center">
+                    <p className="font-semibold">Physical Visit</p>
+                    <p className="text-xs text-muted-foreground mt-1">Visit our clinic in person</p>
+                  </div>
+                </button>
+              </div>
+              {fieldErrors.consultationType && <p className="mt-2 text-xs text-destructive">{fieldErrors.consultationType}</p>}
+            </div>
+          )}
+
+          {step === 2 && (
+            <div>
               <h2 className="text-xl font-bold">What can we help with?</h2>
               <div className="mt-6 grid sm:grid-cols-2 gap-3">
                 {SERVICES.map((s) => (
@@ -217,7 +270,7 @@ export default function BookPage() {
             </div>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <div>
               <h2 className="text-xl font-bold">Choose your doctor</h2>
               <div className="mt-6 grid sm:grid-cols-2 gap-3">
@@ -258,7 +311,7 @@ export default function BookPage() {
             </div>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <div>
               <h2 className="text-xl font-bold">Pick a date & time</h2>
               <div className="mt-6 grid sm:grid-cols-2 gap-6">
@@ -300,7 +353,7 @@ export default function BookPage() {
             </div>
           )}
 
-          {step === 4 && (
+          {step === 5 && (
             <div className="space-y-4">
               <h2 className="text-xl font-bold">Your details</h2>
               <div>
@@ -367,7 +420,7 @@ export default function BookPage() {
             >
               <ChevronLeft className="h-4 w-4 mr-1" /> Back
             </Button>
-            {step < 4 ? (
+            {step < 5 ? (
               <Button type="button" onClick={() => setStep((s) => s + 1)} disabled={!canNext()}>
                 Next <ChevronRight className="h-4 w-4 ml-1" />
               </Button>

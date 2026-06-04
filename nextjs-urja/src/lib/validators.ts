@@ -150,9 +150,12 @@ export type ContactSubmission = z.infer<typeof contactSubmissionSchema>;
 // Public appointment booking
 // ---------------------------------------------------------------------------
 
+export const consultationTypeEnum = z.enum(["VIDEO", "PHYSICAL"]);
+
 export const appointmentBookingSchema = z.object({
   service: shortTextSchema(150),
   doctor: shortTextSchema(150),
+  consultationType: consultationTypeEnum.default("PHYSICAL"),
   date: dateStringSchema,
   time: timeStringSchema,
   name: z.string().trim().min(2, "Please enter your name").max(100, "Name is too long"),

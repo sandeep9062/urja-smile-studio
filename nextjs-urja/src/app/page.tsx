@@ -7,7 +7,7 @@ import {
   Quote,
   MapPin,
   Phone,
-
+  Briefcase,
   Award,
   Users,
   Smile,
@@ -185,13 +185,17 @@ export default function HomePage() {
                   className="h-72 w-full object-cover"
                 />
                 <div className="p-5">
-                  <h3 className="font-semibold">{d.name}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{d.degree}</p>
-                  <p className="text-sm text-primary mt-2 font-medium">{d.specialization}</p>
-                  <Button asChild size="sm" className="mt-4 w-full">
-                    <Link href="/book-appointment">Book with {d.name.split(" ")[1]}</Link>
-                  </Button>
-                </div>
+                   <h3 className="font-semibold">{d.name}</h3>
+                   <p className="text-xs text-muted-foreground mt-0.5">{d.degree}</p>
+                   <p className="text-sm text-primary mt-2 font-medium">{d.specialization}</p>
+                   <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-2">
+                     <Briefcase className="h-3.5 w-3.5" />
+                     {d.experience}
+                   </p>
+                   <Button asChild size="sm" className="mt-4 w-full">
+                     <Link href="/book-appointment">Book with {d.name.split(" ")[1]}</Link>
+                   </Button>
+                 </div>
               </div>
             ))}
           </div>

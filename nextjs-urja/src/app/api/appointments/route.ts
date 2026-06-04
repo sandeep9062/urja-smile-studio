@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     email,
     service,
     doctor,
+    consultationType,
     date,
     time,
     complaint,
@@ -77,9 +78,10 @@ export async function POST(request: NextRequest) {
         date: new Date(`${date}T00:00:00.000Z`),
         time,
         status: "pending",
+        consultationType: consultationType === "VIDEO" ? "VIDEO" : "PHYSICAL",
         notes: complaint
-          ? `[Service requested: ${service}]\n[Doctor requested: ${doctor}]\n\n${complaint}`
-          : `[Service requested: ${service}]\n[Doctor requested: ${doctor}]`,
+          ? `[Service requested: ${service}]\n[Doctor requested: ${doctor}]\n[Consultation type: ${consultationType}]\n\n${complaint}`
+          : `[Service requested: ${service}]\n[Doctor requested: ${doctor}]\n[Consultation type: ${consultationType}]`,
       },
       select: { id: true, createdAt: true },
     });
