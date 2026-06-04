@@ -1,86 +1,101 @@
-import React from 'react';
+import React from "react";
+import Image from "next/image";
+import { ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const WhyUrja: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-stone-50 py-16 sm:py-24">
-      {/* Subtle Background Elements */}
-      <div className="absolute top-0 right-0 -z-10 h-96 w-96 rounded-full bg-emerald-50/50 blur-3xl" />
-      <div className="absolute bottom-0 left-0 -z-10 h-96 w-96 rounded-full bg-amber-50/50 blur-3xl" />
+    <section className="relative overflow-hidden bg-gradient-soft py-10 px-4 md:py-16 sm:px-6 lg:px-8">
+      {/* Decorative glows */}
+      <div
+        className="absolute top-0 right-0 -z-10 h-80 w-80 rounded-full bg-coral/10 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 left-0 -z-10 h-80 w-80 rounded-full bg-primary/10 blur-3xl"
+        aria-hidden
+      />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8 items-center">
-          
-          {/* Left Column: Brand Storytelling & Copy (40% width on large screens) */}
-          <div className="lg:col-span-5 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-800 border border-emerald-100">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              The Holistic Difference
+        <div className="mx-auto max-w-7xl">
+        {/* ── Header ── */}
+        <div className="text-center max-w-3xl mx-auto mb-8">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/70 px-3 py-1 text-xs font-medium text-primary tracking-wide">
+            <Sparkles className="h-3.5 w-3.5" />
+            The Holistic Difference
+          </span>
+          <h2 className="mt-3 text-3xl md:text-4xl font-bold leading-tight tracking-tight">
+            Your Natural Teeth Are{" "}
+            <span className="bg-gradient-coral bg-clip-text text-transparent">
+              Irreplaceable.
+            </span>
+          </h2>
+          <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+            Traditional dentistry often relies on aggressive drilling that
+            removes healthy structure permanently. At{" "}
+            <strong className="text-foreground font-semibold">Urja Dental</strong>,
+            we believe every millimeter matters. We combine advanced biological
+            dentistry with specialized acupuncture protocols to preserve your
+            natural smile and avoid unnecessary root canals.
+          </p>
+        </div>
+
+        {/* ── Image Banner (98% width) ── */}
+        <div className="mx-auto w-[98%] relative group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:shadow-xl hover:border-primary/30">
+          <div className="relative aspect-[21/9] w-full">
+            <Image
+              src="/assets/why-urja.png"
+              alt="Urja Dental - Conventional vs Holistic Dentistry Comparison"
+              fill
+              priority
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+            {/* Subtle overlay for premium feel */}
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/10 via-transparent to-transparent pointer-events-none" />
+          </div>
+        </div>
+        <p className="mt-3 text-center text-xs text-muted-foreground italic">
+          *Visual representation of irreversible structure loss vs. holistic
+          biological preservation.
+        </p>
+
+        {/* ── Key Value Props ── */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
+          <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:shadow-soft transition">
+            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <ShieldCheck className="h-5 w-5" />
             </div>
-            
-            <h2 className="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl lg:text-5xl font-serif leading-tight">
-              Your Natural Teeth <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 to-amber-700">
-                Are Irreplaceable.
-              </span>
-            </h2>
-            
-            <p className="text-base sm:text-lg leading-relaxed text-stone-600 max-w-xl mx-auto lg:mx-0">
-              Traditional dentistry often relies on aggressive drilling that removes healthy structure permanently. At <strong className="text-emerald-900 font-medium">Urja Dental</strong>, we believe every millimeter matters. We combine advanced biological dentistry with specialized acupuncture protocols to preserve your natural smile and avoid unnecessary root canals.
-            </p>
-
-            {/* Key Value Props */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 max-w-lg mx-auto lg:mx-0 text-left">
-              <div className="flex items-start gap-3">
-                <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">✓</div>
-                <div>
-                  <h4 className="font-semibold text-stone-900 text-sm">Micro-Preservation</h4>
-                  <p className="text-xs text-stone-500">Saving every millimeter of enamel.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">✓</div>
-                <div>
-                  <h4 className="font-semibold text-stone-900 text-sm">Acupuncture Protocols</h4>
-                  <p className="text-xs text-stone-500">Natural pain & healing management.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            <div className="pt-4">
-              <a
-                href="#appointment"
-                className="inline-flex items-center justify-center rounded-xl bg-stone-950 px-6 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-stone-800 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
-              >
-                Experience Holistic Care
-              </a>
+            <div>
+              <h4 className="font-semibold text-foreground text-sm">
+                Micro-Preservation
+              </h4>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Saving every millimeter of enamel with minimal intervention.
+              </p>
             </div>
           </div>
-
-          {/* Right Column: Premium Banner Display (70% width on large screens) */}
-          <div className="lg:col-span-7">
-            <div className="relative group overflow-hidden rounded-2xl bg-stone-100 shadow-xl shadow-stone-200/50 border border-stone-200/60 transition-all duration-300 hover:shadow-2xl hover:shadow-stone-300/40">
-              
-              {/* Aspect Ratio container optimized for your horizontal image format */}
-              <div className="aspect-[21/9] sm:aspect-[16/7] lg:aspect-[16/7.2] w-full relative">
-                <img
-                  src="/assets/why-urja.png"
-                  alt="Urja Dental - Conventional vs Holistic Dentistry Comparison Banner"
-                  className="h-full w-full object-cover object-center"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Subtle overlay border for premium gloss finish */}
-              <div className="absolute inset-0 rounded-2xl pointer-events-none ring-1 ring-inset ring-black/5" />
+          <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:shadow-soft transition">
+            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-coral/10 text-coral">
+              <Sparkles className="h-5 w-5" />
             </div>
-            
-            {/* Contextual image caption for accessibility and design depth */}
-            <p className="mt-3 text-center lg:text-right text-xs text-stone-400 italic">
-              *Visual representation of irreversible structure loss vs. holistic biological preservation.
-            </p>
+            <div>
+              <h4 className="font-semibold text-foreground text-sm">
+                Acupuncture Protocols
+              </h4>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Natural pain & healing management through holistic techniques.
+              </p>
+            </div>
           </div>
+        </div>
 
+        {/* ── CTA ── */}
+        <div className="mt-8 text-center">
+          <Button asChild size="lg" className="shadow-soft">
+            <Link href="/book-appointment">
+              Experience Holistic Care <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
