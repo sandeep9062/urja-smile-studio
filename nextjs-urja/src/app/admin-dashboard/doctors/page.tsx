@@ -47,6 +47,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockDoctors } from "@/lib/mock-data";
 import type { Doctor } from "@/lib/types";
+import { ImageDropzone } from "@/components/admin/drag-drop-image-upload";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -56,6 +57,7 @@ export default function DoctorsPage() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
 
   const filteredDoctors = doctors.filter(
     (doc) =>
@@ -316,8 +318,13 @@ export default function DoctorsPage() {
               <Textarea placeholder="Brief biography..." rows={4} />
             </div>
             <div className="space-y-2">
-              <Label>Profile Photo</Label>
-              <Input type="file" accept="image/*" />
+              <ImageDropzone
+                folder="urja-dental/doctors"
+                label="Profile Photo"
+                value={profilePhoto}
+                onChange={setProfilePhoto}
+                tags={["doctor", "profile"]}
+              />
             </div>
           </div>
           <DialogFooter>

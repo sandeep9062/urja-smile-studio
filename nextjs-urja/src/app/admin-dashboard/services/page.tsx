@@ -45,6 +45,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockServices } from "@/lib/mock-data";
 import type { Service } from "@/lib/types";
+import { ImageDropzone, DragDropImageUpload } from "@/components/admin/drag-drop-image-upload";
 
 export default function ServicesPage() {
   const [services, setServices] = useState(mockServices);
@@ -52,6 +53,9 @@ export default function ServicesPage() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [serviceIcon, setServiceIcon] = useState<string | null>(null);
+  const [serviceBanner, setServiceBanner] = useState<string | null>(null);
+  const [beforeAfterUrls, setBeforeAfterUrls] = useState<string[]>([]);
 
   const filteredServices = services.filter(
     (svc) =>
@@ -221,14 +225,20 @@ export default function ServicesPage() {
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Icon</Label>
-                  <Input type="file" accept="image/*" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Banner Image</Label>
-                  <Input type="file" accept="image/*" />
-                </div>
+                <ImageDropzone
+                  folder="urja-dental/services/icons"
+                  label="Icon"
+                  value={serviceIcon}
+                  onChange={setServiceIcon}
+                  tags={["service", "icon"]}
+                />
+                <ImageDropzone
+                  folder="urja-dental/services/banners"
+                  label="Banner Image"
+                  value={serviceBanner}
+                  onChange={setServiceBanner}
+                  tags={["service", "banner"]}
+                />
               </div>
             </TabsContent>
             <TabsContent value="content" className="space-y-4 mt-4">
@@ -248,10 +258,16 @@ export default function ServicesPage() {
                   defaultValue={selectedService?.benefits.join("\n")}
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Before/After Photos</Label>
-                <Input type="file" accept="image/*" multiple />
-              </div>
+              <DragDropImageUpload
+                folder="urja-dental/services/before-after"
+                label="Before/After Photos"
+                multiple
+                variant="inline"
+                value={beforeAfterUrls}
+                onUploaded={(asset) => setBeforeAfterUrls((prev) => [...prev, asset.url])}
+                onRemoved={(url) => setBeforeAfterUrls((prev) => prev.filter((u) => u !== url))}
+                tags={["service", "before-after"]}
+              />
             </TabsContent>
             <TabsContent value="faq" className="space-y-4 mt-4">
               {selectedService?.faqs.map((faq, idx) => (

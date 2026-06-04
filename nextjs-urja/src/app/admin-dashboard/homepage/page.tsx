@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ImageDropzone } from "@/components/admin/drag-drop-image-upload";
 
 export default function HomepageManagerPage() {
   const [heroHeading, setHeroHeading] = useState("Your Smile, Our Passion");
@@ -43,6 +44,10 @@ export default function HomepageManagerPage() {
     ctaLink: "/book-appointment",
     isActive: false,
   });
+
+  const [heroBackground, setHeroBackground] = useState<string | null>(null);
+  const [offerBanner, setOfferBanner] = useState<string | null>(null);
+  const [popupImage, setPopupImage] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -86,10 +91,13 @@ export default function HomepageManagerPage() {
                   rows={3}
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Background Image</Label>
-                <Input type="file" accept="image/*" />
-              </div>
+              <ImageDropzone
+                folder="urja-dental/homepage/hero"
+                label="Background Image"
+                value={heroBackground}
+                onChange={setHeroBackground}
+                tags={["homepage", "hero"]}
+              />
               <div className="space-y-3">
                 <Label>CTA Buttons</Label>
                 {ctaButtons.map((btn, idx) => (
@@ -229,10 +237,13 @@ export default function HomepageManagerPage() {
                   onChange={(e) => setOffer({ ...offer, expiryDate: e.target.value })}
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Banner Image</Label>
-                <Input type="file" accept="image/*" />
-              </div>
+              <ImageDropzone
+                folder="urja-dental/homepage/offers"
+                label="Banner Image"
+                value={offerBanner}
+                onChange={setOfferBanner}
+                tags={["homepage", "offer"]}
+              />
             </CardContent>
           </Card>
         </TabsContent>
@@ -280,10 +291,13 @@ export default function HomepageManagerPage() {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>Popup Image</Label>
-                <Input type="file" accept="image/*" />
-              </div>
+              <ImageDropzone
+                folder="urja-dental/homepage/popup"
+                label="Popup Image"
+                value={popupImage}
+                onChange={setPopupImage}
+                tags={["homepage", "popup"]}
+              />
             </CardContent>
           </Card>
         </TabsContent>

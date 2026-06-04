@@ -485,6 +485,17 @@ export const cloudinaryDeleteSchema = z.object({
 export type CloudinaryDeleteInput = z.infer<typeof cloudinaryDeleteSchema>;
 
 // ---------------------------------------------------------------------------
+// Newsletter Subscription
+// ---------------------------------------------------------------------------
+
+export const newsletterSubscriptionSchema = z.object({
+  email: emailSchema,
+  name: z.string().trim().max(100, "Name is too long").optional().or(z.literal("")),
+  website: z.string().max(0, "Spam detected").optional().default(""), // honeypot
+});
+export type NewsletterSubscriptionInput = z.infer<typeof newsletterSubscriptionSchema>;
+
+// ---------------------------------------------------------------------------
 // Helpers — flatten Zod errors into a field-keyed object for easy UX rendering
 // ---------------------------------------------------------------------------
 

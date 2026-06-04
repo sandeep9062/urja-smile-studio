@@ -588,6 +588,23 @@ model ActivityLog {
 }
 
 // ============================================================================
+// Newsletter Subscribers
+// ============================================================================
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([isActive])
+  @@map("newsletter_subscribers")
+}
+
+// ============================================================================
 // Backups
 // ============================================================================
 

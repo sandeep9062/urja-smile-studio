@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search, Plus, Trash2, Image as ImageIcon, Grid3X3, List, Upload, X } from "lucide-react";
+import { DragDropImageUpload } from "@/components/admin/drag-drop-image-upload";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,7 @@ export default function GalleryPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
 
   const filteredImages = images.filter((img) => {
     const matchesSearch =
@@ -191,12 +193,15 @@ export default function GalleryPage() {
             <DialogDescription>Upload before/after photos to the gallery</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-teal-500 transition-colors cursor-pointer">
-              <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-sm text-gray-600">Drag & drop files here or click to browse</p>
-              <p className="text-xs text-gray-400 mt-1">Supports JPG, PNG, WebP (max 10MB)</p>
-              <Input type="file" accept="image/*" multiple className="hidden" />
-            </div>
+            <DragDropImageUpload
+              folder="urja-dental/gallery"
+              multiple
+              variant="inline"
+              value={uploadedUrls}
+              onUploaded={(asset) => setUploadedUrls((prev) => [...prev, asset.url])}
+              onRemoved={(url) => setUploadedUrls((prev) => prev.filter((u) => u !== url))}
+              maxFileSizeMB={10}
+            />
             <div className="space-y-2">
               <Label>Category</Label>
               <Select>

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import {
   Instagram,
   Facebook,
@@ -7,6 +10,9 @@ import {
   Phone,
   Mail,
   Sparkles,
+  Send,
+  CheckCircle,
+  Loader2,
 } from "lucide-react";
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -21,9 +27,47 @@ function WhatsAppIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
 import { CLINIC } from "@/lib/site-data";
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubscribe(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setStatus("success");
+        setMessage(data.message || "Thanks for subscribing!");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Network error. Please try again.");
+    }
+
+    // Reset status after 4 seconds
+    setTimeout(() => {
+      setStatus("idle");
+      setMessage("");
+    }, 4000);
+  }
+
   return (
     <footer className="mt-24 border-t border-border bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
@@ -131,9 +175,59 @@ export function Footer() {
         </div>
 
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">Hours</h3>
-          <p className="mt-4 text-sm text-muted-foreground">{CLINIC.hours}</p>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
+            Stay Updated
+          </h3>
           <p className="mt-4 text-sm text-muted-foreground">
+            Subscribe to our newsletter for dental tips, special offers, and clinic updates.
+          </p>
+          <form onSubmit={handleSubscribe} className="mt-4 space-y-3">
+            {/* Honeypot — hidden from real users */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              className="absolute -left-[9999px] opacity-0 h-0 w-0"
+              value=""
+              onChange={() => {}}
+              aria-hidden="true"
+            />
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="flex-1 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-3 py-2 text-sm font-medium hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {status === "loading" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+            {message && (
+              <p
+                className={`flex items-center gap-1.5 text-xs ${
+                  status === "success"
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-red-600 dark:text-red-400"
+                }`}
+              >
+                {status === "success" && <CheckCircle className="h-3.5 w-3.5" />}
+                {message}
+              </p>
+            )}
+          </form>
+          <p className="mt-3 text-xs text-muted-foreground">
             Emergency consultations available — please call ahead.
           </p>
         </div>

@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { mockTestimonials } from "@/lib/mock-data";
 import type { Testimonial, TestimonialStatus } from "@/lib/types";
+import { ImageDropzone } from "@/components/admin/drag-drop-image-upload";
 
 const statusColors: Record<TestimonialStatus, string> = {
   approved: "bg-green-100 text-green-700",
@@ -57,6 +58,7 @@ export default function TestimonialsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [patientPhoto, setPatientPhoto] = useState<string | null>(null);
 
   const filteredTestimonials = testimonials.filter((t) => {
     const matchesSearch =
@@ -265,10 +267,13 @@ export default function TestimonialsPage() {
               <Label>Testimonial</Label>
               <Textarea placeholder="Patient testimonial..." rows={4} />
             </div>
-            <div className="space-y-2">
-              <Label>Patient Photo</Label>
-              <Input type="file" accept="image/*" />
-            </div>
+            <ImageDropzone
+              folder="urja-dental/testimonials"
+              label="Patient Photo"
+              value={patientPhoto}
+              onChange={setPatientPhoto}
+              tags={["testimonial", "patient"]}
+            />
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
