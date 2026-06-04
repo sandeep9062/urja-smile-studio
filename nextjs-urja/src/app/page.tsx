@@ -130,12 +130,41 @@ export default function HomePage() {
             and precision.
           </p>
         </div>
-        <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+        {/* Desktop grid */}
+        <div className="mt-12 hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SERVICES.map(({ slug, title, short, image }) => (
             <Link
               key={slug}
               href={`/services/${slug}`}
               className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-soft transition"
+            >
+              <div className="relative h-40 w-full overflow-hidden">
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="font-semibold text-base">{title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{short}</p>
+                <span className="mt-4 inline-flex items-center text-xs font-semibold text-primary group-hover:gap-2 gap-1 transition-all">
+                  Learn more <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile horizontal scroll carousel */}
+        <div className="mt-12 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-4 px-4 sm:hidden">
+          {SERVICES.map(({ slug, title, short, image }) => (
+            <Link
+              key={slug}
+              href={`/services/${slug}`}
+              className="group snap-start shrink-0 w-[70vw] max-w-[280px] rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-soft transition"
             >
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
@@ -210,7 +239,9 @@ export default function HomePage() {
           </p>
           <h2 className="mt-3 text-3xl md:text-4xl font-bold">Loved by 25,000+ patients</h2>
         </div>
-        <div className="mt-12 grid md:grid-cols-3 gap-5">
+
+        {/* Desktop grid */}
+        <div className="mt-12 hidden md:grid md:grid-cols-3 gap-5">
           {TESTIMONIALS.slice(0, 3).map((t) => (
             <Card key={t.name} className="border-border">
               <CardContent className="p-6">
@@ -242,6 +273,43 @@ export default function HomePage() {
             </Card>
           ))}
         </div>
+
+        {/* Mobile horizontal scroll */}
+        <div className="mt-6 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-4 px-4 md:hidden">
+          {TESTIMONIALS.slice(0, 3).map((t) => (
+            <div key={t.name} className="snap-start shrink-0 w-[80vw] max-w-[320px]">
+              <Card className="border-border h-full">
+                <CardContent className="p-6">
+                  <Quote className="h-6 w-6 text-coral" />
+                  <div className="mt-3 flex gap-0.5">
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-coral text-coral" />
+                    ))}
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-foreground/90">
+                    &ldquo;{t.review}&rdquo;
+                  </p>
+                  <div className="mt-5 pt-5 border-t border-border flex items-center gap-3">
+                    <Image
+                      src={t.image}
+                      alt={t.name}
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 rounded-full object-cover ring-2 ring-coral/20"
+                    />
+                    <div>
+                      <p className="font-semibold text-sm">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {t.treatment} • {t.date}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </div>
+
         <div className="mt-8 text-center">
           <Button asChild variant="outline">
             <Link href="/testimonials">Read all reviews</Link>
@@ -253,7 +321,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Video stories</h2>
           <p className="mt-2 text-muted-foreground">Real patients, in their own words.</p>
-          <div className="mt-6 sm:mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+          {/* Desktop grid */}
+          <div className="mt-6 sm:mt-8 hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -265,6 +335,29 @@ export default function HomePage() {
                   width={600}
                   height={400}
                   className="h-56 w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-foreground/40 group-hover:bg-foreground/30 transition flex items-center justify-center">
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-soft group-hover:scale-110 transition">
+                    <Play className="h-7 w-7 ml-1" fill="currentColor" />
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile horizontal scroll */}
+          <div className="mt-6 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-4 px-4 sm:hidden">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="snap-start shrink-0 w-[75vw] max-w-[300px] relative rounded-2xl overflow-hidden border border-border group cursor-pointer"
+              >
+                <Image
+                  src={`https://picsum.photos/seed/video-${i}/600/400`}
+                  alt={`Video testimonial ${i}`}
+                  width={600}
+                  height={400}
+                  className="h-52 w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-foreground/40 group-hover:bg-foreground/30 transition flex items-center justify-center">
                   <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-soft group-hover:scale-110 transition">
@@ -293,7 +386,9 @@ export default function HomePage() {
               <Link href="/gallery">View Full Gallery</Link>
             </Button>
           </div>
-          <div className="mt-8 sm:mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+
+          {/* Desktop grid */}
+          <div className="mt-8 sm:mt-10 hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="rounded-2xl overflow-hidden border border-border bg-card">
                 <div className="grid grid-cols-2">
@@ -316,6 +411,43 @@ export default function HomePage() {
                       width={400}
                       height={192}
                       className="h-32 sm:h-48 w-full object-cover"
+                    />
+                    <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold uppercase px-2 py-0.5 rounded">
+                      After
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile horizontal scroll */}
+          <div className="mt-6 flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-4 px-4 sm:hidden">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="snap-start shrink-0 w-[80vw] max-w-[320px] rounded-2xl overflow-hidden border border-border bg-card"
+              >
+                <div className="grid grid-cols-2">
+                  <div className="relative">
+                    <Image
+                      src={`https://picsum.photos/seed/before-${i}/400/400`}
+                      alt="Before treatment"
+                      width={400}
+                      height={192}
+                      className="h-36 w-full object-cover"
+                    />
+                    <span className="absolute top-2 left-2 bg-foreground/80 text-background text-[10px] font-bold uppercase px-2 py-0.5 rounded">
+                      Before
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <Image
+                      src={`https://picsum.photos/seed/after-${i}/400/400`}
+                      alt="After treatment"
+                      width={400}
+                      height={192}
+                      className="h-36 w-full object-cover"
                     />
                     <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold uppercase px-2 py-0.5 rounded">
                       After
