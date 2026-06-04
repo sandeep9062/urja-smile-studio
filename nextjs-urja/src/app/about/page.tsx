@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, Target, Eye, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
+import HolisticVsConventional from "@/components/site/HolisticVsConventional";
 
 export default function AboutPage() {
   return (
@@ -44,6 +45,7 @@ export default function AboutPage() {
           </ul>
         </div>
       </section>
+      <HolisticVsConventional />
 
       <section className="bg-card border-y border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 grid md:grid-cols-2 gap-6">
